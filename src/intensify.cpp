@@ -24,6 +24,7 @@ extern volatile bool finished;
 extern long long crossRemoved;
 long long best = LLONG_MIN;
 
+// for long long variables
 void Individual::local_search_ll(int cuttingMult){
 	//Sort the indexes randomly to make it stochastic
 	int vs[dim];
@@ -99,7 +100,7 @@ void Individual::local_search_ll(int cuttingMult){
 	}
 }
 
-
+// for int variables
 void Individual::local_search(int cuttingMult){
 	//Sort the indexes randomly to make it stochastic
 	int vs[dim];
@@ -176,7 +177,7 @@ void Individual::local_search(int cuttingMult){
 	}
 }
 
-void Individual::intensify(const string &perturbationType, double ils_time, int cuttingMult, int swaps, bool reqll){
+void Individual::intensify(const string &perturbationType, double ils_time, int cuttingMult, int swaps, bool reqll, const vector<int>& perturbations){
 	//cout << "Inicia ILS en " << cost << endl;
 	//Time structures
 	if (finished) return;
@@ -189,12 +190,16 @@ void Individual::intensify(const string &perturbationType, double ils_time, int 
 	} else {
 		local_search_ll(cuttingMult);
 	}
+
+	if(perturbations.empty()) return;	// no perturbation selected
+
 	/*Save solution after apply local search*/
 	Individual newInd=internalClone();
+
 	/*Loop principal*/
 	while((stop<ils_time) && (!finished)){
 		//double v = (double)(random()) / RAND_MAX;
-		int selected = random() % 3;
+		int selected = perturbations[random() % perturbations.size()];
 		if (selected == 0){
 			for (int i = 0; i < swaps; i++){
 				int f = random() % dim;
