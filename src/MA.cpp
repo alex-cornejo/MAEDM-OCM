@@ -24,7 +24,7 @@ extern volatile bool finished;
 MA::MA(int N_, double pc_, const string &crossType_,
        const string &perturbationType_, double DIfactor_, double ils_time_,
        double finalTime_, const string &outputFile_, int cuttingMult_,
-       int swaps_, bool reqLongLong_, Input &input_): input(input_) {
+       int swaps_, bool reqLongLong_, Input &input_, Output &output_): input(input_), output(output_) {
   N = N_;
   pc = pc_;
   crossType = crossType_;
@@ -231,6 +231,11 @@ void MA::trunReplacement() {
 }
 
 void MA::initDI() {
+  double meanDistance = computeDiversity();
+  DI = meanDistance * DIfactor;
+}
+
+double MA::computeDiversity(){
   double meanDistance = 0;
   for (int i = 0; i < population.size(); i++) {
     for (int j = i + 1; j < population.size(); j++) {
@@ -238,17 +243,22 @@ void MA::initDI() {
     }
   }
   meanDistance /= (population.size() * (population.size() - 1)) / 2;
-  DI = meanDistance * DIfactor;
+  return meanDistance;
 }
 
 void MA::run() {
   ofstream f;
   f.open(outputFile, ios::app);
   initPopulation();
-  if (this->input.getReplacementType() == Input::ReplacementType::BNP)
+  if (this->input.getDiversityTrace() == true){
+      double diversity = computeDiversity();
+      cout<<"Initial diversity: "<<diversity<<endl;
+      this->output.addToDiversity(diversity);
+  }
+  auto replacementType = this->input.getReplacementType();
+  if (replacementType == Input::ReplacementType::BNP)
     initDI();
   double cTime;
-  auto replacementType = this->input.getReplacementType();
 
   do {
     // Iteration of the MA: selection, crossover, intensification, replacement
@@ -272,6 +282,11 @@ void MA::run() {
       cerr << "Unknown replacement type!\n";
       throw runtime_error("Unknown replacement type!\n");
       break;
+    }
+    if (this->input.getDiversityTrace() == true){
+      double diversity = computeDiversity();
+      cout<<"Diversity: "<<diversity<<endl;
+      this->output.addToDiversity(diversity);
     }
     struct timeval currentTime;
     gettimeofday(&currentTime, NULL);

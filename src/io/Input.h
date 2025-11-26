@@ -20,6 +20,9 @@ private:
   std::vector<int> perturbations;
   int seed;
   ReplacementType replacementType;
+  bool diversityTrace;
+  int traceCount;
+
 
 public:
   Input(const std::string &configFilePath) {
@@ -35,6 +38,10 @@ public:
     this->outputFile = this->json["outputFile"].get<std::string>();
     this->timeLimit = this->json["timeLimit"].get<double>();
     this->seed = this->json["seed"].get<int>();
+    this->diversityTrace = this->json["diversityTrace"].get<bool>();
+    this->traceCount = this->json["traceCount"].get<int>();
+
+    // perturbations
     for (int pert : this->json["perturbations"].get<std::vector<int>>()) {
       this->perturbations.push_back(pert);
     }
@@ -65,4 +72,7 @@ public:
   const std::vector<int> &getPerturbations() const {
     return this->perturbations;
   }
+  bool getDiversityTrace() const { return this->diversityTrace; }
+  int getTraceCount() const { return this->traceCount; }
+
 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 
 #include "Input.h"
@@ -21,6 +23,7 @@ public:
   Output(const Input &input_) : input(input_) {}
 
   void addToSolution(int val) { solution.push_back(val); }
+  void addToDiversity(double val) { diversity.push_back(val); }
 
   nlohmann::json toJson() const {
     nlohmann::json bodyJson;

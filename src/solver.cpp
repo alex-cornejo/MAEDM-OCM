@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
   gettimeofday(&currentTime, NULL);
   double cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
   if (alg == "MA_matrix") {
-    MA ma(N, pc, "cx", "SWM", di, ils_time, f1Time, "out.txt", cuttingMult, swaps, reqLongLong, input);
+    MA ma(N, pc, "cx", "SWM", di, ils_time, f1Time, "out.txt", cuttingMult, swaps, reqLongLong, input, output);
     ma.run();
     gettimeofday(&currentTime, NULL);
     cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
