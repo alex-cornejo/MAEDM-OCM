@@ -8,9 +8,12 @@
 class Output {
 
 private:
-  Input input;
+  Input &input;
   std::vector<int> solution;
   std::vector<double> diversity;
+  std::vector<long long> fitness;
+  bool reduced;
+
   bool save(const std::string &output_path, const std::string &content) const {
     std::ofstream output_file(output_path);
     if (!output_file.is_open()) return false;
@@ -20,16 +23,20 @@ private:
   }
 
 public:
-  Output(const Input &input_) : input(input_) {}
+  Output(Input &input_) : input(input_) {}
 
   void addToSolution(int val) { solution.push_back(val); }
   void addToDiversity(double val) { diversity.push_back(val); }
+  void setReduced(bool val) { reduced = val; }
+  Input& getInput() { return input; }
 
   nlohmann::json toJson() const {
     nlohmann::json bodyJson;
     bodyJson["input"] = input.toJson();
     bodyJson["solution"] = solution;
     bodyJson["diversity"] = diversity;
+    bodyJson["fitness"] = fitness;
+    bodyJson["reduced"] = reduced;
     return bodyJson;
   }
 

@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
   gettimeofday(&currentTime, NULL);
   double initialTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
   srandom(seed);
-  Instance *inst = new Instance(true, input.getInputFile());
+  Instance *inst = new Instance(true, output);
   Problem *p = NULL;
   ProblemLL *pll = new ProblemLL();
   bool reqLongLong = true;
