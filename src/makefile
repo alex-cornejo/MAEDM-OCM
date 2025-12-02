@@ -1,8 +1,14 @@
 #compiler
 CC = g++ -std=c++11
-
+# include path for headers (json.hpp placed in src/nlohmann/json.hpp)
+JSON_INC = -I.
 #compiler flags
-CCFLAGS = -c -w -O2
+CCFLAGS = -c -w -O2 $(JSON_INC)
+
+# # debug settings
+# CC = g++ -std=c++11 -g
+# JSON_INC = -I.
+# CCFLAGS = -c -w -g -O0 $(JSON_INC)
 
 #normal compilations
 all: solver
@@ -10,7 +16,7 @@ all: solver
 #--------------------------------------------------------------------------------
 
 solver: solver.cpp Instance.o Individual.o MA.o intensify.o getDistance.o crossoverCX.o utils.o initializeHeuristic.o evaluate.o intensify_edges.o utils.h Individual.h Problem.h ProblemLL.h Instance.h 
-	$(CC) solver.cpp Instance.o Individual.o MA.o intensify.o getDistance.o crossoverCX.o utils.o initializeHeuristic.o evaluate.o intensify_edges.o -o $@
+	$(CC) $(JSON_INC) solver.cpp Instance.o Individual.o MA.o intensify.o getDistance.o crossoverCX.o utils.o initializeHeuristic.o evaluate.o intensify_edges.o -o $@
 
 utils.o: utils.cpp utils.h
 	$(CC) $(CCFLAGS) utils.cpp -o $@

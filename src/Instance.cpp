@@ -14,9 +14,9 @@ using namespace std;
 extern long long crossRemoved; 
 extern bool isBig;
 
-Instance::Instance(bool load){
+Instance::Instance(bool load, const string& inputFile){
 	if (!load) return;
-	loadInstance();
+	loadInstance(inputFile);
 	if(graph_adjList.size() > 17000){
 		isBig = true;
 	} else {
@@ -66,13 +66,18 @@ void Instance::reduce(){
 /**
  * Load an instance from a file
  */
-void Instance::loadInstance(){
+void Instance::loadInstance(const string& inputFile){
 	string p, ocr;
-	cin >> p >> ocr >> numNodesA >> numNodesB >> numEdges;
+	std::ifstream in(inputFile);
+    // check if open
+    if (!in.is_open()) {
+      throw std::invalid_argument("Could not open graph file: " + inputFile + "\n");
+    }
+	in >> p >> ocr >> numNodesA >> numNodesB >> numEdges;
 	graph_adjList.resize(numNodesB);
 	int u,v;
 	for(int i=0;i<numEdges;i++){
-		cin >> u >> v;
+		in >> u >> v;
 		graph_adjList[v-numNodesA-1].push_back(u);
 	}
 	for (int i = 0; i < numNodesB; i++){
