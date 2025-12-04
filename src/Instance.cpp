@@ -96,6 +96,13 @@ void Instance::loadInstance(Output& output){
 	}
 	else {
 		output.setReduced(false);
+		newToOrig.resize(numNodesB);
+    	similarInOrig.resize(numNodesB);
+		int c = 0;
+		for (int i = 0; i < numNodesB; i++){
+			newToOrig[c] = i;
+			graph_adjList[c++] = graph_adjList[i];
+		}
 	}
 }
 
