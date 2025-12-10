@@ -163,6 +163,8 @@ int main(int argc, char *argv[]) {
   gettimeofday(&currentTime, NULL);
   cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
   // cout << "Tiempo transcurrido " << cTime - initialTime << endl;
+  output.setIsBig(isBig);
+  output.setRuntime(cTime - initialTime);
   output.write(); // write json with results
   return 0;
 }

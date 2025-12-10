@@ -13,6 +13,8 @@ private:
   std::vector<double> diversity;
   std::vector<long long> fitness;
   bool reduced;
+  bool isBig;
+  double runtime;
 
   bool save(const std::string &output_path, const std::string &content) const {
     std::ofstream output_file(output_path);
@@ -29,6 +31,8 @@ public:
   void addToDiversity(double val) { diversity.push_back(val); }
   void setReduced(bool val) { reduced = val; }
   Input& getInput() { return input; }
+  void setIsBig(bool val) { isBig = val; }
+  void setRuntime(double runtime_) { runtime = runtime_; }
 
   nlohmann::json toJson() const {
     nlohmann::json bodyJson;
@@ -37,6 +41,8 @@ public:
     bodyJson["diversity"] = diversity;
     bodyJson["fitness"] = fitness;
     bodyJson["reduced"] = reduced;
+    bodyJson["isBig"] = isBig;
+    bodyJson["runtime"] = runtime;
     return bodyJson;
   }
 
