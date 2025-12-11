@@ -21,7 +21,7 @@ using namespace std;
 class Instance{  
 	public:
 
- 		Instance(bool, Output& output);
+ 		Instance(bool, Result& result);
         
 		//variables
 		int numNodesA;
@@ -33,7 +33,7 @@ class Instance{
 		vector < vector < long long > > pair_matrix;
         
 		//methods
-		void loadInstance(Output& output);
+		void loadInstance(Result& result);
 		long long pair_cost(int i, int j);
 		void computeMatrix();
 		bool reduce();

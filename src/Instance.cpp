@@ -14,9 +14,9 @@ using namespace std;
 extern long long crossRemoved; 
 extern bool isBig;
 
-Instance::Instance(bool load, Output& output){
+Instance::Instance(bool load, Result& result){
 	if (!load) return;
-	loadInstance(output);
+	loadInstance(result);
 	if(graph_adjList.size() > 17000){
 		isBig = true;
 	} else {
@@ -72,9 +72,9 @@ bool Instance::reduce(){
 /**
  * Load an instance from a file
  */
-void Instance::loadInstance(Output& output){
+void Instance::loadInstance(Result& result){
 	string p, ocr;
-	const string& inputFile = output.getInput().getInputFile();
+	const string& inputFile = result.getInput().getInputFile();
 	std::ifstream in(inputFile);
     // check if open
     if (!in.is_open()) {
@@ -90,12 +90,12 @@ void Instance::loadInstance(Output& output){
 	for (int i = 0; i < numNodesB; i++){
 		sort(graph_adjList[i].begin(), graph_adjList[i].end());
 	}
-	if (output.getInput().getReduction()==true){
+	if (result.getInput().getReduction()==true){
 		bool reduced = reduce();
-		output.setReduced(reduced);
+		result.setReduced(reduced);
 	}
 	else {
-		output.setReduced(false);
+		result.setReduced(false);
 		newToOrig.resize(numNodesB);
     	similarInOrig.resize(numNodesB);
 		int c = 0;

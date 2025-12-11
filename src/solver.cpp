@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
   }
   string confFile = argv[1];
   Input input(confFile);
-  Output output(input);
+  Result result(input);
   int seed = input.getSeed();
   double totalRuntime = input.getTimeLimit();
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
   gettimeofday(&currentTime, NULL);
   double initialTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
   srandom(seed);
-  Instance *inst = new Instance(true, output);
+  Instance *inst = new Instance(true, result);
   Problem *p = NULL;
   ProblemLL *pll = new ProblemLL();
   bool reqLongLong = true;
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
   gettimeofday(&currentTime, NULL);
   double cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
   if (alg == "MA_matrix") {
-    MA ma(N, pc, "cx", "SWM", di, ils_time, f1Time, "out.txt", cuttingMult, swaps, reqLongLong, input, output);
+    MA ma(N, pc, "cx", "SWM", di, ils_time, f1Time, "out.txt", cuttingMult, swaps, reqLongLong, result);
     ma.run();
     gettimeofday(&currentTime, NULL);
     cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
@@ -127,9 +127,9 @@ int main(int argc, char *argv[]) {
                                   cuttingMult * 3, swaps, reqLongLong, input.getPerturbations());
     // cout << "Mejor solucion: " << ma.population[0]->cost - crossRemoved << endl;
     for (int nv : ma.population[0]->S) {
-      output.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
+      result.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
       for (int o : inst->similarInOrig[inst->newToOrig[nv]]) {
-        output.addToSolution(inst->numNodesA + 1 + o);
+        result.addToSolution(inst->numNodesA + 1 + o);
       }
     }
   } else if (alg == "ILS") {
@@ -154,17 +154,17 @@ int main(int argc, char *argv[]) {
     ei->ils_edges(totalRuntime - (cTime - initialTime), cuttingMult, swaps);
     // cout << "Mejor solucion: " << ei->cost - crossRemoved << endl;
     for (int nv : ei->S) {
-      output.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
+      result.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
       for (int o : inst->similarInOrig[inst->newToOrig[nv]]) {
-        output.addToSolution(inst->numNodesA + 1 + o);
+        result.addToSolution(inst->numNodesA + 1 + o);
       }
     }
   }
   gettimeofday(&currentTime, NULL);
   cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
   // cout << "Tiempo transcurrido " << cTime - initialTime << endl;
-  output.setIsBig(isBig);
-  output.setRuntime(cTime - initialTime);
-  output.write(); // write json with results
+  result.setIsBig(isBig);
+  result.setRuntime(cTime - initialTime);
+  result.write(); // write json with results
   return 0;
 }

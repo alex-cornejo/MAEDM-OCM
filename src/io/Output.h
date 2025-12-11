@@ -5,7 +5,7 @@
 #include "Input.h"
 #include <nlohmann/json.hpp>
 
-class Output {
+class Result {
 
 private:
   Input &input;
@@ -25,7 +25,7 @@ private:
   }
 
 public:
-  Output(Input &input_) : input(input_) {}
+  Result(Input &input_) : input(input_) {}
 
   void addToSolution(int val) { solution.push_back(val); }
   void addToDiversity(double val) { diversity.push_back(val); }
