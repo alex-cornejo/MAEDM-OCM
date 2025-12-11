@@ -13,13 +13,12 @@ It was modified for the Pace Challenge 2024 with the following features:
 #define __MA_H__
 
 #include "Individual.h"
-#include "io/Input.h"
 #include "io/Output.h"
 #include <bits/stdc++.h>
 
 class MA {
 public:
-  MA(int N_, double pc_, const string &crossType_, const string &perturbationType_, double DIfactor_, double ils_time_, double finalTime_, const string &outputFile, int cuttingMult, int swaps, bool reqLongLong, Input &input_, Output &output_);
+  MA(int N_, double pc_, const string &crossType_, const string &perturbationType_, double DIfactor_, double ils_time_, double finalTime_, const string &outputFile, int cuttingMult, int swaps, bool reqLongLong, Result &result_);
   void run();
   // Parameters of MA
   int N;                   // Population Size
@@ -58,8 +57,7 @@ public:
   double elapsedTime;
 
 private:
-  Input &input;
-  Output &output;
+  Result &result;
 };
 
 #endif

@@ -24,7 +24,7 @@ extern volatile bool finished;
 MA::MA(int N_, double pc_, const string &crossType_,
        const string &perturbationType_, double DIfactor_, double ils_time_,
        double finalTime_, const string &outputFile_, int cuttingMult_,
-       int swaps_, bool reqLongLong_, Input &input_, Output &output_): input(input_), output(output_) {
+       int swaps_, bool reqLongLong_, Result &result_): result(result_) {
   N = N_;
   pc = pc_;
   crossType = crossType_;
@@ -46,7 +46,7 @@ void MA::initPopulation() {
   for (int i = 0; i < N; i++) {
     Individual *ei = new Individual();
     ei->initialize_heuristic();
-    ei->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, input.getPerturbations());
+    ei->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
     population.push_back(ei);
   }
 }
@@ -86,7 +86,7 @@ void MA::crossover() {
 void MA::intensify() {
   for (int i = 0; i < offspring.size(); i++) {
     if (finished) return;
-    offspring[i]->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, input.getPerturbations());
+    offspring[i]->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
   }
 }
 
@@ -250,12 +250,12 @@ void MA::run() {
   ofstream f;
   f.open(outputFile, ios::app);
   initPopulation();
-  if (this->input.getDiversityTrace() == true){
+  if (this->result.getInput().getDiversityTrace() == true){
       double diversity = computeDiversity();
       cout<<"Initial diversity: "<<diversity<<endl;
-      this->output.addToDiversity(diversity);
+      this->result.addToDiversity(diversity);
   }
-  auto replacementType = this->input.getReplacementType();
+  auto replacementType = this->result.getInput().getReplacementType();
   if (replacementType == Input::ReplacementType::BNP)
     initDI();
   double cTime;
@@ -283,10 +283,10 @@ void MA::run() {
       throw runtime_error("Unknown replacement type!\n");
       break;
     }
-    if (this->input.getDiversityTrace() == true){
+    if (this->result.getInput().getDiversityTrace() == true){
       double diversity = computeDiversity();
       cout<<"Diversity: "<<diversity<<endl;
-      this->output.addToDiversity(diversity);
+      this->result.addToDiversity(diversity);
     }
     struct timeval currentTime;
     gettimeofday(&currentTime, NULL);

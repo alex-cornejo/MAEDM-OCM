@@ -22,7 +22,7 @@ private:
   ReplacementType replacementType;
   bool diversityTrace;
   int traceCount;
-
+  bool reduction;
 
 public:
   Input(const std::string &configFilePath) {
@@ -40,6 +40,7 @@ public:
     this->seed = this->json["seed"].get<int>();
     this->diversityTrace = this->json["diversityTrace"].get<bool>();
     this->traceCount = this->json["traceCount"].get<int>();
+    this->reduction = this->json["reduction"].get<bool>();
 
     // perturbations
     for (int pert : this->json["perturbations"].get<std::vector<int>>()) {
@@ -74,5 +75,6 @@ public:
   }
   bool getDiversityTrace() const { return this->diversityTrace; }
   int getTraceCount() const { return this->traceCount; }
+  bool getReduction() const { return this->reduction; }
 
 };

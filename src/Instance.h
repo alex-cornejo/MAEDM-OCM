@@ -14,12 +14,14 @@ projects.
 
 #include <bits/stdc++.h>
 
+#include "io/Output.h"
+
 using namespace std;
 
 class Instance{  
 	public:
 
- 		Instance(bool, const string& inputFile);
+ 		Instance(bool, Result& result);
         
 		//variables
 		int numNodesA;
@@ -31,10 +33,10 @@ class Instance{
 		vector < vector < long long > > pair_matrix;
         
 		//methods
-		void loadInstance(const string& inputFile);
+		void loadInstance(Result& result);
 		long long pair_cost(int i, int j);
 		void computeMatrix();
-		void reduce();
+		bool reduce();
 		long long medWin;
 		__attribute__((always_inline)) inline long long pair_gain(int i, int j){
 			int n = graph_adjList[i].size();

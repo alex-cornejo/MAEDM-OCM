@@ -14,9 +14,9 @@ using namespace std;
 extern long long crossRemoved; 
 extern bool isBig;
 
-Instance::Instance(bool load, const string& inputFile){
+Instance::Instance(bool load, Result& result){
 	if (!load) return;
-	loadInstance(inputFile);
+	loadInstance(result);
 	if(graph_adjList.size() > 17000){
 		isBig = true;
 	} else {
@@ -24,7 +24,7 @@ Instance::Instance(bool load, const string& inputFile){
 	}
 }
 
-void Instance::reduce(){
+bool Instance::reduce(){
 	newToOrig.resize(numNodesB);
 	similarInOrig.resize(numNodesB);
 
@@ -55,19 +55,26 @@ void Instance::reduce(){
 		newToOrig[c] = i;
 		graph_adjList[c++] = graph_adjList[i];
 	}
+
+	if(numNodesB==difs.size()){
+		return false;
+	}
+
 	numNodesB = difs.size();
 	graph_adjList.resize(numNodesB);
 	for (int i = 0; i < graph_adjList.size(); i++){
 		sort(graph_adjList[i].begin(), graph_adjList[i].end());
 	}
+	return true;
 }
 
 /******************************************************************************/
 /**
  * Load an instance from a file
  */
-void Instance::loadInstance(const string& inputFile){
+void Instance::loadInstance(Result& result){
 	string p, ocr;
+	const string& inputFile = result.getInput().getInputFile();
 	std::ifstream in(inputFile);
     // check if open
     if (!in.is_open()) {
@@ -83,7 +90,18 @@ void Instance::loadInstance(const string& inputFile){
 	for (int i = 0; i < numNodesB; i++){
 		sort(graph_adjList[i].begin(), graph_adjList[i].end());
 	}
-	reduce();
+	if (result.getInput().getReduction()==true){
+		bool reduced = reduce();
+		result.setReduced(reduced);
+	}
+	else {
+		result.setReduced(false);
+		newToOrig.resize(numNodesB);
+    	similarInOrig.resize(numNodesB);
+		for (int i = 0; i < numNodesB; i++){
+			newToOrig[i] = i;
+		}
+	}
 }
 
 long long Instance::pair_cost(int i, int j){
