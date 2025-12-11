@@ -39,7 +39,9 @@ public:
     this->timeLimit = this->json["timeLimit"].get<double>();
     this->seed = this->json["seed"].get<int>();
     this->diversityTrace = this->json["diversityTrace"].get<bool>();
-    this->traceCount = this->json["traceCount"].get<int>();
+    if (this->diversityTrace) {
+      this->traceCount = this->json["traceCount"].get<int>();
+    }
     this->reduction = this->json["reduction"].get<bool>();
 
     // perturbations

@@ -58,6 +58,9 @@ public:
 
 private:
   Result &result;
+  vector<double> tracingSteps; // for tracking convergence and diversity behavior
+  void initTrack();
+  void evalTrace(double elapsedTime); 
 };
 
 #endif

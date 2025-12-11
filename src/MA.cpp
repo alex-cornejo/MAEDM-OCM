@@ -39,6 +39,10 @@ MA::MA(int N_, double pc_, const string &crossType_,
   cuttingMult = cuttingMult_;
   swaps = swaps_;
   reqLongLong = reqLongLong_;
+
+  if (result.getInput().getDiversityTrace()) {
+    initTrack();
+  }
 }
 
 // Initialize and apply intensification to each individual
@@ -283,14 +287,35 @@ void MA::run() {
       throw runtime_error("Unknown replacement type!\n");
       break;
     }
-    if (this->result.getInput().getDiversityTrace() == true){
-      double diversity = computeDiversity();
-      cout<<"Diversity: "<<diversity<<endl;
-      this->result.addToDiversity(diversity);
-    }
+    
     struct timeval currentTime;
     gettimeofday(&currentTime, NULL);
     cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
     elapsedTime = cTime - initialTime;
-  } while ((cTime - initialTime < finalTime) && (!finished));
+
+    if (this->result.getInput().getDiversityTrace() == true){
+      evalTrace(elapsedTime);
+    }
+
+  } while ((elapsedTime < finalTime) && (!finished));
+}
+
+void MA::initTrack() {
+    tracingSteps.reserve(result.getInput().getTraceCount());
+    double delta;
+    delta = finalTime / result.getInput().getTraceCount();
+    for (int i = result.getInput().getTraceCount(); i >= 1; --i) {
+        tracingSteps.push_back(delta * i);
+    }
+}
+
+void MA::evalTrace(double elapsedTime) {
+    if (tracingSteps.empty()==false) {
+        if (elapsedTime >= tracingSteps.back()) {
+            double diversity = computeDiversity();
+            cout<<"Diversity: "<<diversity<<endl;
+            this->result.addToDiversity(diversity);
+            tracingSteps.pop_back();
+        }
+    }
 }
