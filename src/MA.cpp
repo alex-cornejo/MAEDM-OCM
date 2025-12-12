@@ -15,6 +15,7 @@ It was modified for the Pace Challenge 2024 with the following features:
 #include <string>
 
 #include "MA.h"
+#include "Individual.h"
 #include "utils.h"
 
 using namespace std;
@@ -52,6 +53,9 @@ void MA::initPopulation() {
     ei->initialize_heuristic();
     ei->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
     population.push_back(ei);
+    if (bestGlobal == nullptr || ei->getCost() < bestGlobal->getCost()) {
+      bestGlobal = ei;
+    }
   }
 }
 
@@ -118,6 +122,7 @@ void MA::replacement() {
       indexBest = i;
     }
   }
+  bestGlobal = all[indexBest]; // track best solution
   population.push_back(all[indexBest]);
   all[indexBest] = all.back();
   all.pop_back();
@@ -166,45 +171,40 @@ void MA::replacement() {
 }
 
 // Generational
-void MA::genReplacement() {
-  for (Individual *ind : population)
-    delete ind;
-  population.clear();
+// true if current generation improved best global solution
+// false otherwise
+bool MA::genReplacement() {
 
+  for (Individual* ind : population){
+    if(ind!=bestGlobal) delete ind; // keep best global
+  }
+  population.clear();
   population = move(offspring);
   offspring.clear();
+  Individual* newBest = population.front();
+  for (Individual *ind : population){
+    if (ind->getCost() < newBest->getCost()) {
+      newBest = ind;
+    }
+  }
+  // update best global
+  if (newBest->getCost() < bestGlobal->getCost()) {
+    delete bestGlobal;
+    bestGlobal = newBest;
+    return true;
+  }
+  return false;
 }
 
 // Elitism
 void MA::elitReplacement() {
-  Individual *best = population[0];
-  int bestIndex = 0;
-  for (int i = 1; i < (int)population.size(); ++i) {
-    if (population[i]->getCost() < best->getCost()) {
-      delete population[bestIndex];
-      best = population[i];
-      bestIndex = i;
+  
+    if(genReplacement()==false){
+      // mantain global best in new population
+      population.push_back(bestGlobal);
     }
-    if (bestIndex != i) {
-      delete population[i];
-    }
-  }
-  population.clear();
-  bool elitism = true;
-  for (Individual *ind : offspring) {
-    if (ind->getCost() < best->getCost()) {
-      elitism = false;
-      break;
-    }
-  }
-  population = move(offspring);
-  offspring.clear();
-  if (elitism) {
-    population.push_back(best);
-  } else {
-    delete best;
-  }
 }
+
 
 // Truncation
 void MA::trunReplacement() {
@@ -232,6 +232,9 @@ void MA::trunReplacement() {
   for (int i = N; i < all.size(); i++) {
     delete (all[i]);
   }
+
+  // track best solution
+  bestGlobal = population.front();
 }
 
 void MA::initDI() {
@@ -313,8 +316,8 @@ void MA::evalTrace(double elapsedTime) {
     if (tracingSteps.empty()==false) {
         if (elapsedTime >= tracingSteps.back()) {
             double diversity = computeDiversity();
-            cout<<"Diversity: "<<diversity<<endl;
-            this->result.addToDiversity(diversity);
+            result.addToDiversity(diversity);
+            result.addToFitness(bestGlobal->getCost());
             tracingSteps.pop_back();
         }
     }

@@ -29,6 +29,7 @@ public:
 
   void addToSolution(int val) { solution.push_back(val); }
   void addToDiversity(double val) { diversity.push_back(val); }
+  void addToFitness(long long val) { fitness.push_back(val); }
   void setReduced(bool val) { reduced = val; }
   Input& getInput() { return input; }
   void setIsBig(bool val) { isBig = val; }

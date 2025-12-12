@@ -44,7 +44,7 @@ public:
 
   // replacement operators
   void replacement(); // BNP replacement
-  void genReplacement(); // Generational replacement
+  bool genReplacement(); // Generational replacement
   void elitReplacement(); // Elit replacement
   void trunReplacement(); // Truncation replacement
 
@@ -56,7 +56,11 @@ public:
   double DI;
   double elapsedTime;
 
+  // getters
+  Individual *getBestGlobal() { return bestGlobal; }
+
 private:
+  Individual * bestGlobal = nullptr;
   Result &result;
   vector<double> tracingSteps; // for tracking convergence and diversity behavior
   void initTrack();

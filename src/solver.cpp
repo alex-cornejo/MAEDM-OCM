@@ -123,15 +123,17 @@ int main(int argc, char *argv[]) {
     gettimeofday(&currentTime, NULL);
     cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
     if (totalRuntime - (cTime - initialTime) > 0)
-      ma.population[0]->intensify("SWM", totalRuntime - (cTime - initialTime),
+      ma.getBestGlobal()->intensify("SWM", totalRuntime - (cTime - initialTime),
                                   cuttingMult * 3, swaps, reqLongLong, input.getPerturbations());
+      
     // cout << "Mejor solucion: " << ma.population[0]->cost - crossRemoved << endl;
-    for (int nv : ma.population[0]->S) {
+    for (int nv : ma.getBestGlobal()->S) {
       result.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
       for (int o : inst->similarInOrig[inst->newToOrig[nv]]) {
         result.addToSolution(inst->numNodesA + 1 + o);
       }
     }
+    result.addToFitness(ma.getBestGlobal()->getCost());
   } else if (alg == "ILS") {
     // Estimate medwin
     long long tot = 0;
