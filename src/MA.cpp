@@ -40,6 +40,7 @@ MA::MA(int N_, double pc_, const string &crossType_,
   cuttingMult = cuttingMult_;
   swaps = swaps_;
   reqLongLong = reqLongLong_;
+  ngen = 0;
 
   if (result.getInput().getDiversityTrace()) {
     initTrack();
@@ -51,7 +52,7 @@ void MA::initPopulation() {
   for (int i = 0; i < N; i++) {
     Individual *ei = new Individual();
     ei->initialize_heuristic();
-    ei->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
+    lsCallsCount += ei->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
     population.push_back(ei);
     if (bestGlobal == nullptr || ei->getCost() < bestGlobal->getCost()) {
       bestGlobal = ei;
@@ -94,7 +95,7 @@ void MA::crossover() {
 void MA::intensify() {
   for (int i = 0; i < offspring.size(); i++) {
     if (finished) return;
-    offspring[i]->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
+    lsCallsCount+=offspring[i]->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
   }
 }
 
@@ -299,8 +300,9 @@ void MA::run() {
     if (this->result.getInput().getDiversityTrace() == true){
       evalTrace(elapsedTime);
     }
-
+    ngen++;
   } while ((elapsedTime < finalTime) && (!finished));
+  result.setNgen(ngen);
 }
 
 void MA::initTrack() {

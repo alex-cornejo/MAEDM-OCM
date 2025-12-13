@@ -32,6 +32,9 @@ public:
   int cuttingMult;
   int swaps;
   bool reqLongLong;
+  int ngen;
+  long long lsCallsCount = 0;
+  
 
   // Basic procedures of MA
   void initPopulation();
@@ -58,6 +61,7 @@ public:
 
   // getters
   Individual *getBestGlobal() { return bestGlobal; }
+  long long getLSCallsCount() { return lsCallsCount; }
 
 private:
   Individual * bestGlobal = nullptr;

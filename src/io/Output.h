@@ -15,6 +15,8 @@ private:
   bool reduced;
   bool isBig;
   double runtime;
+  int ngen;
+  long long lsCallsCount;  // number of local search calls
 
   bool save(const std::string &output_path, const std::string &content) const {
     std::ofstream output_file(output_path);
@@ -34,6 +36,8 @@ public:
   Input& getInput() { return input; }
   void setIsBig(bool val) { isBig = val; }
   void setRuntime(double runtime_) { runtime = runtime_; }
+  void setNgen(int ngen_) { ngen = ngen_; }
+  void setLsCallsCount(long long count) { lsCallsCount = count; }
 
   nlohmann::json toJson() const {
     nlohmann::json bodyJson;
@@ -44,6 +48,8 @@ public:
     bodyJson["reduced"] = reduced;
     bodyJson["isBig"] = isBig;
     bodyJson["runtime"] = runtime;
+    bodyJson["ngen"] = ngen;
+    bodyJson["lsCallsCount"] = lsCallsCount;
     return bodyJson;
   }
 
