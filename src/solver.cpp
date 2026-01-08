@@ -134,6 +134,7 @@ int main(int argc, char *argv[]) {
       }
     }
     result.addToFitness(ma.getBestGlobal()->getCost());
+    result.setLsCallsCount(ma.getLSCallsCount());
   } else if (alg == "ILS") {
     // Estimate medwin
     long long tot = 0;
