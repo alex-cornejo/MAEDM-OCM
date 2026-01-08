@@ -1,14 +1,23 @@
+#pragma once
+
 #include <vector>
 
 #include "Input.h"
 #include <nlohmann/json.hpp>
 
-class Output {
+class Result {
 
 private:
-  Input input;
+  Input &input;
   std::vector<int> solution;
   std::vector<double> diversity;
+  std::vector<long long> fitness;
+  bool reduced;
+  bool isBig;
+  double runtime;
+  int ngen;
+  long long lsCallsCount;  // number of local search calls
+
   bool save(const std::string &output_path, const std::string &content) const {
     std::ofstream output_file(output_path);
     if (!output_file.is_open()) return false;
@@ -18,15 +27,29 @@ private:
   }
 
 public:
-  Output(const Input &input_) : input(input_) {}
+  Result(Input &input_) : input(input_) {}
 
   void addToSolution(int val) { solution.push_back(val); }
+  void addToDiversity(double val) { diversity.push_back(val); }
+  void addToFitness(long long val) { fitness.push_back(val); }
+  void setReduced(bool val) { reduced = val; }
+  Input& getInput() { return input; }
+  void setIsBig(bool val) { isBig = val; }
+  void setRuntime(double runtime_) { runtime = runtime_; }
+  void setNgen(int ngen_) { ngen = ngen_; }
+  void setLsCallsCount(long long count) { lsCallsCount = count; }
 
   nlohmann::json toJson() const {
     nlohmann::json bodyJson;
     bodyJson["input"] = input.toJson();
     bodyJson["solution"] = solution;
     bodyJson["diversity"] = diversity;
+    bodyJson["fitness"] = fitness;
+    bodyJson["reduced"] = reduced;
+    bodyJson["isBig"] = isBig;
+    bodyJson["runtime"] = runtime;
+    bodyJson["ngen"] = ngen;
+    bodyJson["lsCallsCount"] = lsCallsCount;
     return bodyJson;
   }
 

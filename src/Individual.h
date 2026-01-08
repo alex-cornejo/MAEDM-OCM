@@ -33,7 +33,7 @@ class Individual {
 		void local_search(int cuttingMult);
 		void local_search_ll(int cuttingMult);//using long long variables
 		void local_search_edges(double time_limit, int cuttingMult);
-		void intensify(const string &mutationType, double ils_time, int cuttingMult, int swaps, bool reqll, const vector<int>& perturbations);
+		int intensify(const string &mutationType, double ils_time, int cuttingMult, int swaps, bool reqll, const vector<int>& perturbations);
 		void ils_edges(double ils_time, int cuttingMult, int swaps);
 		
 		void evaluate();

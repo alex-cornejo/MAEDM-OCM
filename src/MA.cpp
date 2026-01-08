@@ -15,6 +15,7 @@ It was modified for the Pace Challenge 2024 with the following features:
 #include <string>
 
 #include "MA.h"
+#include "Individual.h"
 #include "utils.h"
 
 using namespace std;
@@ -24,7 +25,7 @@ extern volatile bool finished;
 MA::MA(int N_, double pc_, const string &crossType_,
        const string &perturbationType_, double DIfactor_, double ils_time_,
        double finalTime_, const string &outputFile_, int cuttingMult_,
-       int swaps_, bool reqLongLong_, Input &input_): input(input_) {
+       int swaps_, bool reqLongLong_, Result &result_): result(result_) {
   N = N_;
   pc = pc_;
   crossType = crossType_;
@@ -39,6 +40,11 @@ MA::MA(int N_, double pc_, const string &crossType_,
   cuttingMult = cuttingMult_;
   swaps = swaps_;
   reqLongLong = reqLongLong_;
+  ngen = 0;
+
+  if (result.getInput().getTracing()) {
+    initTrack();
+  }
 }
 
 // Initialize and apply intensification to each individual
@@ -46,8 +52,11 @@ void MA::initPopulation() {
   for (int i = 0; i < N; i++) {
     Individual *ei = new Individual();
     ei->initialize_heuristic();
-    ei->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, input.getPerturbations());
+    lsCallsCount += ei->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
     population.push_back(ei);
+    if (bestGlobal == nullptr || ei->getCost() < bestGlobal->getCost()) {
+      bestGlobal = ei;
+    }
   }
 }
 
@@ -86,7 +95,7 @@ void MA::crossover() {
 void MA::intensify() {
   for (int i = 0; i < offspring.size(); i++) {
     if (finished) return;
-    offspring[i]->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, input.getPerturbations());
+    lsCallsCount+=offspring[i]->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
   }
 }
 
@@ -114,6 +123,7 @@ void MA::replacement() {
       indexBest = i;
     }
   }
+  bestGlobal = all[indexBest]; // track best solution
   population.push_back(all[indexBest]);
   all[indexBest] = all.back();
   all.pop_back();
@@ -162,45 +172,40 @@ void MA::replacement() {
 }
 
 // Generational
-void MA::genReplacement() {
-  for (Individual *ind : population)
-    delete ind;
-  population.clear();
+// true if current generation improved best global solution
+// false otherwise
+bool MA::genReplacement() {
 
+  for (Individual* ind : population){
+    if(ind!=bestGlobal) delete ind; // keep best global
+  }
+  population.clear();
   population = move(offspring);
   offspring.clear();
+  Individual* newBest = population.front();
+  for (Individual *ind : population){
+    if (ind->getCost() < newBest->getCost()) {
+      newBest = ind;
+    }
+  }
+  // update best global
+  if (newBest->getCost() < bestGlobal->getCost()) {
+    delete bestGlobal;
+    bestGlobal = newBest;
+    return true;
+  }
+  return false;
 }
 
 // Elitism
 void MA::elitReplacement() {
-  Individual *best = population[0];
-  int bestIndex = 0;
-  for (int i = 1; i < (int)population.size(); ++i) {
-    if (population[i]->getCost() < best->getCost()) {
-      delete population[bestIndex];
-      best = population[i];
-      bestIndex = i;
+  
+    if(genReplacement()==false){
+      // maintain global best in new population
+      population.push_back(bestGlobal);
     }
-    if (bestIndex != i) {
-      delete population[i];
-    }
-  }
-  population.clear();
-  bool elitism = true;
-  for (Individual *ind : offspring) {
-    if (ind->getCost() < best->getCost()) {
-      elitism = false;
-      break;
-    }
-  }
-  population = move(offspring);
-  offspring.clear();
-  if (elitism) {
-    population.push_back(best);
-  } else {
-    delete best;
-  }
 }
+
 
 // Truncation
 void MA::trunReplacement() {
@@ -228,9 +233,17 @@ void MA::trunReplacement() {
   for (int i = N; i < all.size(); i++) {
     delete (all[i]);
   }
+
+  // track best solution
+  bestGlobal = population.front();
 }
 
 void MA::initDI() {
+  double meanDistance = computeDiversity();
+  DI = meanDistance * DIfactor;
+}
+
+double MA::computeDiversity(){
   double meanDistance = 0;
   for (int i = 0; i < population.size(); i++) {
     for (int j = i + 1; j < population.size(); j++) {
@@ -238,17 +251,22 @@ void MA::initDI() {
     }
   }
   meanDistance /= (population.size() * (population.size() - 1)) / 2;
-  DI = meanDistance * DIfactor;
+  return meanDistance;
 }
 
 void MA::run() {
   ofstream f;
   f.open(outputFile, ios::app);
   initPopulation();
-  if (this->input.getReplacementType() == Input::ReplacementType::BNP)
+  if (this->result.getInput().getTracing() == true){
+      double diversity = computeDiversity();
+      this->result.addToDiversity(diversity);
+      this->result.addToFitness(bestGlobal->getCost());
+  }
+  auto replacementType = this->result.getInput().getReplacementType();
+  if (replacementType == Input::ReplacementType::BNP)
     initDI();
   double cTime;
-  auto replacementType = this->input.getReplacementType();
 
   do {
     // Iteration of the MA: selection, crossover, intensification, replacement
@@ -273,9 +291,36 @@ void MA::run() {
       throw runtime_error("Unknown replacement type!\n");
       break;
     }
+    
     struct timeval currentTime;
     gettimeofday(&currentTime, NULL);
     cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
     elapsedTime = cTime - initialTime;
-  } while ((cTime - initialTime < finalTime) && (!finished));
+
+    if (this->result.getInput().getTracing() == true){
+      evalTrace(elapsedTime);
+    }
+    ngen++;
+  } while ((elapsedTime < finalTime) && (!finished));
+  result.setNgen(ngen);
+}
+
+void MA::initTrack() {
+    tracingSteps.reserve(result.getInput().getTraceCount());
+    double delta;
+    delta = finalTime / result.getInput().getTraceCount();
+    for (int i = result.getInput().getTraceCount(); i >= 1; --i) {
+        tracingSteps.push_back(delta * i);
+    }
+}
+
+void MA::evalTrace(double elapsedTime) {
+    if (tracingSteps.empty()==false) {
+        if (elapsedTime >= tracingSteps.back()) {
+            double diversity = computeDiversity();
+            result.addToDiversity(diversity);
+            result.addToFitness(bestGlobal->getCost());
+            tracingSteps.pop_back();
+        }
+    }
 }

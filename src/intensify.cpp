@@ -177,10 +177,11 @@ void Individual::local_search(int cuttingMult){
 	}
 }
 
-void Individual::intensify(const string &perturbationType, double ils_time, int cuttingMult, int swaps, bool reqll, const vector<int>& perturbations){
+// returns number of local search executions
+int Individual::intensify(const string &perturbationType, double ils_time, int cuttingMult, int swaps, bool reqll, const vector<int>& perturbations){
 	//cout << "Inicia ILS en " << cost << endl;
 	//Time structures
-	if (finished) return;
+	if (finished) return 0;
 	struct timeval start_bl,end_bl;
 	double stop=0.0;
 	gettimeofday(&start_bl,NULL);
@@ -191,12 +192,13 @@ void Individual::intensify(const string &perturbationType, double ils_time, int 
 		local_search_ll(cuttingMult);
 	}
 
-	if(perturbations.empty()) return;	// no perturbation selected
+	if(perturbations.empty()) return 0;	// no perturbation selected, no local search applied
 
 	/*Save solution after apply local search*/
 	Individual newInd=internalClone();
 
 	/*Loop principal*/
+	int lsIt = 0;
 	while((stop<ils_time) && (!finished)){
 		//double v = (double)(random()) / RAND_MAX;
 		int selected = perturbations[random() % perturbations.size()];
@@ -254,7 +256,7 @@ void Individual::intensify(const string &perturbationType, double ils_time, int 
 		} else {
 			newInd.local_search_ll(cuttingMult);
 		}
-	
+		lsIt++;
 		/*P_4 Check cost in the pertutbate solution*/
 		if(newInd.cost>=cost){
 			S=newInd.S;
@@ -270,6 +272,7 @@ void Individual::intensify(const string &perturbationType, double ils_time, int 
 			//cout << "                                                     Va: " << best - crossRemoved << endl;
 		}
 	}
+	return lsIt;
 	//cout << "Iteraciones: " << count << endl;
 	//cout << "Termina en " << cost - crossRemoved << endl;
 
