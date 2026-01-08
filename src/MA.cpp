@@ -42,7 +42,7 @@ MA::MA(int N_, double pc_, const string &crossType_,
   reqLongLong = reqLongLong_;
   ngen = 0;
 
-  if (result.getInput().getDiversityTrace()) {
+  if (result.getInput().getTracing()) {
     initTrack();
   }
 }
@@ -258,10 +258,10 @@ void MA::run() {
   ofstream f;
   f.open(outputFile, ios::app);
   initPopulation();
-  if (this->result.getInput().getDiversityTrace() == true){
+  if (this->result.getInput().getTracing() == true){
       double diversity = computeDiversity();
-      cout<<"Initial diversity: "<<diversity<<endl;
       this->result.addToDiversity(diversity);
+      this->result.addToFitness(bestGlobal->getCost());
   }
   auto replacementType = this->result.getInput().getReplacementType();
   if (replacementType == Input::ReplacementType::BNP)
@@ -297,7 +297,7 @@ void MA::run() {
     cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
     elapsedTime = cTime - initialTime;
 
-    if (this->result.getInput().getDiversityTrace() == true){
+    if (this->result.getInput().getTracing() == true){
       evalTrace(elapsedTime);
     }
     ngen++;

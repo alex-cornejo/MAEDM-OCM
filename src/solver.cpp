@@ -122,9 +122,11 @@ int main(int argc, char *argv[]) {
     ma.run();
     gettimeofday(&currentTime, NULL);
     cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
-    if (totalRuntime - (cTime - initialTime) > 0)
-      ma.getBestGlobal()->intensify("SWM", totalRuntime - (cTime - initialTime),
+    long long lastLsCallsCount = 0;
+    if (totalRuntime - (cTime - initialTime) > 0){
+      lastLsCallsCount = ma.getBestGlobal()->intensify("SWM", totalRuntime - (cTime - initialTime),
                                   cuttingMult * 3, swaps, reqLongLong, input.getPerturbations());
+    }
       
     // cout << "Mejor solucion: " << ma.population[0]->cost - crossRemoved << endl;
     for (int nv : ma.getBestGlobal()->S) {
@@ -133,8 +135,11 @@ int main(int argc, char *argv[]) {
         result.addToSolution(inst->numNodesA + 1 + o);
       }
     }
-    result.addToFitness(ma.getBestGlobal()->getCost());
-    result.setLsCallsCount(ma.getLSCallsCount());
+    if(input.getTracing() == true){
+      result.addToFitness(ma.getBestGlobal()->getCost());
+      result.addToDiversity(ma.computeDiversity());
+    }
+    result.setLsCallsCount(ma.getLSCallsCount()+lastLsCallsCount);
   } else if (alg == "ILS") {
     // Estimate medwin
     long long tot = 0;
