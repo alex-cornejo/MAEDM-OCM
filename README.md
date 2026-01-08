@@ -1,16 +1,16 @@
 # Memetic Algorithm with explicit management of diversity for the one-sided crossing minimization problem.
 This is a fork of the winner metaheuristic of the **PACE Challenge 2024 - Heuristic track** developed by CIMAT_Team [1].
 
-It includes additional features and componentes needed for an in-depth analysis of the proposal.
+It includes additional features and components needed for an in-depth analysis of the proposal.
 
 ## System requirements
-The implementation was written and designed to be run in a Linux environment. Neverthless, it should be capable to be compiled and run in other operating systems with minor modifications.
+The implementation was written and designed to be run in a Linux environment. Nevertheless, it should be capable to be compiled and run in other operating systems with minor modifications.
 
 The following instructions have been tested in Debian 13.
 
 ## Execution
 In order to compile it, just enter the `src/` folder and execute `make`. The only dependency is g++.
-To execute the solver, a json configuration file is required. The configuration file must containt the following parameters:
+To execute the solver, a json configuration file is required. The configuration file must contain the following parameters:
 
 |  Parameter               | Description                                                                  |
 |--------------------------|------------------------------------------------------------------------------|
@@ -22,7 +22,7 @@ To execute the solver, a json configuration file is required. The configuration 
 | `seed`                   | (int) Seed for random numbers generation.                                    |
 | `diversityTrace`         | (bool) Flag to enable diversity trace.                                       |
 | `traceCount`             | (int) Amount of tracings to perform among the algorithm executions.          |
-| `reduction `             | (bool) Enables reduction of the input graph.                                 |
+| `reduction`              | (bool) Enables reduction of the input graph.                                 |
 
 An example of this configuration is the following (`examples/1.conf.json`)
 ```json
@@ -47,7 +47,7 @@ Once the program is executed, the output json file will be created in the path d
 
 |  Parameter               | Description                                                                  |
 |--------------------------|------------------------------------------------------------------------------|
-| `input`                  | (json) The input configuratin of the experiment.                             |
+| `input`                  | (json) The input configuration of the experiment.                            |
 | `ngen`                   | (int) Number of applied iterations of the algorithm.                         |
 | `reduced`                | (bool) `true` if the input graph was reduced, `false` otherwise.             |
 | `lsCallsCount`           | (int) Number of total local search calls.                                    |
@@ -55,7 +55,7 @@ Once the program is executed, the output json file will be created in the path d
 | `isBig`                  | (bool) `false` if memetic algorithm was applied.                             |
 | `diversity`              | (double array) Diversity per algorithm iteration.                            |
 | `fitness`                | (int array) Best-global solution per iteration.                              |
-| `solution`               | (int array) Best-found solution.                                       |
+| `solution`               | (int array) Best-found solution.                                             |
 
 
 

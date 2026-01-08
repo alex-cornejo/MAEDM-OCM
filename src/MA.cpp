@@ -201,7 +201,7 @@ bool MA::genReplacement() {
 void MA::elitReplacement() {
   
     if(genReplacement()==false){
-      // mantain global best in new population
+      // maintain global best in new population
       population.push_back(bestGlobal);
     }
 }
