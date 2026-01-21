@@ -136,8 +136,7 @@ int main(int argc, char *argv[]) {
       }
     }
     if(input.getTracing() == true){
-      result.addToFitness(ma.getBestGlobal()->getCost());
-      result.addToDiversity(ma.computeDiversity());
+      result.addTrace(ma.getBestGlobal()->getCost(), ma.computeDiversity(), totalRuntime);
     }
     result.setLsCallsCount(ma.getLSCallsCount()+lastLsCallsCount);
   } else if (alg == "ILS") {

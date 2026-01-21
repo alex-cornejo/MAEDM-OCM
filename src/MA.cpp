@@ -260,8 +260,7 @@ void MA::run() {
   initPopulation();
   if (this->result.getInput().getTracing() == true){
       double diversity = computeDiversity();
-      this->result.addToDiversity(diversity);
-      this->result.addToFitness(bestGlobal->getCost());
+      this->result.addTrace(bestGlobal->getCost(), diversity, 0);
   }
   auto replacementType = this->result.getInput().getReplacementType();
   if (replacementType == Input::ReplacementType::BNP)
@@ -318,8 +317,7 @@ void MA::evalTrace(double elapsedTime) {
     if (tracingSteps.empty()==false) {
         if (elapsedTime >= tracingSteps.back()) {
             double diversity = computeDiversity();
-            result.addToDiversity(diversity);
-            result.addToFitness(bestGlobal->getCost());
+            result.addTrace(bestGlobal->getCost(), diversity, elapsedTime);
             tracingSteps.pop_back();
         }
     }
