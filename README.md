@@ -45,18 +45,16 @@ An example of this configuration is the following (`examples/1.conf.json`)
 ## Output
 Once the program is executed, the output json file will be created in the path described at `outputFile` with the result of the execution. This json file contains the following fields:
 
-|  Parameter               | Description                                                                  |
-|--------------------------|------------------------------------------------------------------------------|
-| `input`                  | (json) The input configuration of the experiment.                            |
-| `ngen`                   | (int) Number of applied iterations of the algorithm.                         |
-| `reduced`                | (bool) `true` if the input graph was reduced, `false` otherwise.             |
-| `lsCallsCount`           | (int) Number of total local search calls.                                    |
-| `runtime`                | (double) Total running time of the execution.                                |
-| `isBig`                  | (bool) `false` if memetic algorithm was applied.                             |
-| `diversity`              | (double array) Diversity per algorithm iteration.                            |
-| `fitness`                | (int array) Best-global solution per iteration.                              |
-| `solution`               | (int array) Best-found solution.                                             |
-
+|  Parameter               | Description                                                                                  |
+|--------------------------|----------------------------------------------------------------------------------------------|
+| `input`                  | (json) The input configuration of the experiment.                                            |
+| `ngen`                   | (int) Number of applied iterations of the algorithm.                                         |
+| `reduced`                | (bool) `true` if the input graph was reduced, `false` otherwise.                             |
+| `lsCallsCount`           | (int) Number of total local search calls.                                                    |
+| `runtime`                | (double) Total running time of the execution.                                                |
+| `isBig`                  | (bool) `false` if memetic algorithm was applied.                                             |
+| `solution`               | (int array) Best-found solution.                                                             |
+| `trace`                  | (array) Trace records of fitness, diversity, expected diversity, and elapsed running time.   |
 
 
 ## References
