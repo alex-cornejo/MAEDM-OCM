@@ -18,6 +18,7 @@ private:
   struct TraceEntry {
     long long fitness;
     double diversity;
+    double ediversity;
     double elapsedTime;
 
     nlohmann::json toJson() const {
@@ -25,6 +26,7 @@ private:
       j["fitness"] = fitness;
       j["diversity"] = diversity;
       j["elapsedTime"] = elapsedTime;
+      j["ediversity"] = ediversity;
       return j;
     }
   };
@@ -48,8 +50,8 @@ public:
   void setRuntime(double runtime_) { runtime = runtime_; }
   void setNgen(int ngen_) { ngen = ngen_; }
   void setLsCallsCount(long long count) { lsCallsCount = count; }
-  void addTrace(long long fitness, double diversity, double elapTime) {
-    trace.push_back({fitness, diversity, elapTime});
+  void addTrace(long long fitness, double diversity, double ediversity, double elapTime) {
+    trace.push_back({fitness, diversity, ediversity,elapTime});
   }
 
   nlohmann::json toJson() const {

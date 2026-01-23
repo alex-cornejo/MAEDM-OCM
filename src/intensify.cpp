@@ -128,7 +128,7 @@ void Individual::local_search(int cuttingMult){
 			for (int j = i - 1; j >= 0; j--) {//Move to the left
 				gain += problem->gain[value][S[j]];
 
-				if (gain < limit + maxgain){
+				if (gain < limit + maxgain and cuttingMult!=-1){
 					break;
 				}
 				if (gain > maxgain) {
@@ -143,7 +143,7 @@ void Individual::local_search(int cuttingMult){
 			gain = 0;
 			for (int j = i + 1; j < dim; j++) {//Move to the right
 				gain += problem->gain[S[j]][value];
-				if (gain < limit + maxgain){
+				if (gain < limit + maxgain and cuttingMult!=-1){
 					break;
 				}
 				if (gain > maxgain) {

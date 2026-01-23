@@ -76,7 +76,7 @@ void Individual::local_search_edges(double time_limit, int cuttingMult){
 			for (int j = i - 1; j >= 0; j--) {//Move to the left
 				//gain += ((instance->pair_cost(S[i], S[j]) - instance->pair_cost(S[j], S[i])));
 				gain += instance->pair_gain(value, S[j]);
-				if (gain < limit + maxgain ){
+				if (gain < limit + maxgain and cuttingMult!=-1){
 					break;
 				}
 				if (gain > maxgain) {
@@ -91,7 +91,7 @@ void Individual::local_search_edges(double time_limit, int cuttingMult){
 			for (int j = i + 1; j < dim; j++) {//Move to the right
 				//gain += ((instance->pair_cost(S[j], S[i]) - instance->pair_cost(S[i], S[j])));
 				gain += instance->pair_gain(S[j], value);
-				if (gain < limit + maxgain ){
+				if (gain < limit + maxgain and cuttingMult!=-1){
 					break;
 				}
 				if (gain > maxgain) {

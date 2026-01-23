@@ -135,9 +135,6 @@ int main(int argc, char *argv[]) {
         result.addToSolution(inst->numNodesA + 1 + o);
       }
     }
-    if(input.getTracing() == true){
-      result.addTrace(ma.getBestGlobal()->getCost(), ma.computeDiversity(), totalRuntime);
-    }
     result.setLsCallsCount(ma.getLSCallsCount()+lastLsCallsCount);
   } else if (alg == "ILS") {
     // Estimate medwin

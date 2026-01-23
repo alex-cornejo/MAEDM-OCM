@@ -135,6 +135,7 @@ void MA::replacement() {
 
   // Select next N - 1 solution
   double D = DI - DI * elapsedTime / finalTime;
+  this->ediversity = D; // track expected diversity
   while (population.size() != N) {
     // Update distances
     for (int i = 0; i < all.size(); i++) {
@@ -241,6 +242,7 @@ void MA::trunReplacement() {
 void MA::initDI() {
   double meanDistance = computeDiversity();
   DI = meanDistance * DIfactor;
+  this->ediversity = DI; // track expected diversity
 }
 
 double MA::computeDiversity(){
@@ -258,13 +260,15 @@ void MA::run() {
   ofstream f;
   f.open(outputFile, ios::app);
   initPopulation();
+  auto replacementType = this->result.getInput().getReplacementType();
+  if (replacementType == Input::ReplacementType::BNP){
+    initDI();
+  }
   if (this->result.getInput().getTracing() == true){
       double diversity = computeDiversity();
-      this->result.addTrace(bestGlobal->getCost(), diversity, 0);
+      this->result.addTrace(bestGlobal->getCost(), diversity, ediversity, 0);
   }
-  auto replacementType = this->result.getInput().getReplacementType();
-  if (replacementType == Input::ReplacementType::BNP)
-    initDI();
+
   double cTime;
 
   do {
@@ -317,7 +321,7 @@ void MA::evalTrace(double elapsedTime) {
     if (tracingSteps.empty()==false) {
         if (elapsedTime >= tracingSteps.back()) {
             double diversity = computeDiversity();
-            result.addTrace(bestGlobal->getCost(), diversity, elapsedTime);
+            result.addTrace(bestGlobal->getCost(), diversity, ediversity, elapsedTime);
             tracingSteps.pop_back();
         }
     }
