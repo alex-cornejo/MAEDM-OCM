@@ -39,7 +39,12 @@ public:
     this->outputFile = this->json["outputFile"].get<std::string>();
     this->timeLimit = this->json["timeLimit"].get<double>();
     this->seed = this->json["seed"].get<int>();
-    this->cuttingMult = this->json["cuttingMult"].get<int>();
+    if (this->json.contains("cuttingMult")) {
+      this->cuttingMult = this->json["cuttingMult"].get<int>();
+    } else {
+      // Use recommended default if cuttingMult is not provided in the config.
+      this->cuttingMult = 45;
+    }
     this->tracing = this->json["tracing"].get<bool>();
     if (this->tracing) {
       this->traceCount = this->json["traceCount"].get<int>();

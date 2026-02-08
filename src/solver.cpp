@@ -101,7 +101,6 @@ int main(int argc, char *argv[]) {
   string alg;
   double ils_time, pc, di;
   int f1Time;
-  // int cuttingMult = 45; 
   int swaps = 6;
   int N = 36;
   if (isBig) {

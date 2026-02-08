@@ -63,7 +63,7 @@ public:
     bodyJson["runtime"] = runtime;
     bodyJson["ngen"] = ngen;
     bodyJson["lsCallsCount"] = lsCallsCount;
-    nlohmann::json traceJson;
+    nlohmann::json traceJson = nlohmann::json::array();
     for (const auto &entry : trace) {
       traceJson.push_back(entry.toJson());
     }
