@@ -23,6 +23,7 @@ private:
   bool tracing;
   int traceCount;
   bool reduction;
+  int cuttingMult;
 
 public:
   Input(const std::string &configFilePath) {
@@ -38,6 +39,7 @@ public:
     this->outputFile = this->json["outputFile"].get<std::string>();
     this->timeLimit = this->json["timeLimit"].get<double>();
     this->seed = this->json["seed"].get<int>();
+    this->cuttingMult = this->json["cuttingMult"].get<int>();
     this->tracing = this->json["tracing"].get<bool>();
     if (this->tracing) {
       this->traceCount = this->json["traceCount"].get<int>();
@@ -78,5 +80,6 @@ public:
   bool getTracing() const { return this->tracing; }
   int getTraceCount() const { return this->traceCount; }
   bool getReduction() const { return this->reduction; }
+  int getCuttingMult() const { return this->cuttingMult; }
 
 };

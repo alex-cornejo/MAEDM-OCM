@@ -23,6 +23,7 @@ To execute the solver, a json configuration file is required. The configuration 
 | `tracing`                | (bool) Flag to enable diversity and fitness tracing.                         |
 | `traceCount`             | (int) Amount of tracings to perform among the algorithm executions.          |
 | `reduction`              | (bool) Enables reduction of the input graph.                                 |
+| `cuttingMult`            | (int) Parameter needed for local search (recommended 45).                    |
 
 An example of this configuration is the following (`examples/1.conf.json`)
 ```json
@@ -35,7 +36,8 @@ An example of this configuration is the following (`examples/1.conf.json`)
     "seed": 1,
     "tracing": true,
     "traceCount": 100,
-    "reduction": true
+    "reduction": true,
+    "cuttingMult": 45
 }
 ```
 
