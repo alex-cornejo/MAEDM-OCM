@@ -58,10 +58,12 @@ public:
   double initialTime;
   double DI;
   double elapsedTime;
+  double ediversity = -1;  // expected diversity (only available for BNP)
 
   // getters
   Individual *getBestGlobal() { return bestGlobal; }
   long long getLSCallsCount() { return lsCallsCount; }
+  double getEDiversity() { return ediversity; }
 
 private:
   Individual * bestGlobal = nullptr;

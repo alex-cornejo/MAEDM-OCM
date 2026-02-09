@@ -49,6 +49,7 @@ int main(int argc, char *argv[]) {
   Result result(input);
   int seed = input.getSeed();
   double totalRuntime = input.getTimeLimit();
+  int cuttingMult = input.getCuttingMult();
 
   signal(SIGTERM, printer);
   struct timeval currentTime;
@@ -100,7 +101,7 @@ int main(int argc, char *argv[]) {
   string alg;
   double ils_time, pc, di;
   int f1Time;
-  int cuttingMult = 45, swaps = 6;
+  int swaps = 6;
   int N = 36;
   if (isBig) {
     alg = "ILS";
@@ -134,10 +135,6 @@ int main(int argc, char *argv[]) {
       for (int o : inst->similarInOrig[inst->newToOrig[nv]]) {
         result.addToSolution(inst->numNodesA + 1 + o);
       }
-    }
-    if(input.getTracing() == true){
-      result.addToFitness(ma.getBestGlobal()->getCost());
-      result.addToDiversity(ma.computeDiversity());
     }
     result.setLsCallsCount(ma.getLSCallsCount()+lastLsCallsCount);
   } else if (alg == "ILS") {
