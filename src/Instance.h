@@ -1,5 +1,5 @@
 /*******************************************************************************************
-Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda 
+Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda, J. A. Cornejo-Acosta 
 
 Description: Load instances of the crossing Minimization Problem and store it. Moreover
 it is able to generate the costs in a similar way than in the Linear Ordering Problem.

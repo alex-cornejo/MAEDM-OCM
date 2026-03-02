@@ -1,5 +1,5 @@
 /*******************************************************************************************
-Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda 
+Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda, J. A. Cornejo-Acosta 
 
 Description: 
 *Implementation of a stochatic hill-climber with the move operation. Initially the
@@ -192,13 +192,13 @@ int Individual::intensify(const string &perturbationType, double ils_time, int c
 		local_search_ll(cuttingMult);
 	}
 
-	if(perturbations.empty()) return 0;	// no perturbation selected, no local search applied
+	if(perturbations.empty()) return 1;	// no perturbation selected, no additional local searches applied
 
 	/*Save solution after apply local search*/
 	Individual newInd=internalClone();
 
 	/*Loop principal*/
-	int lsIt = 0;
+	int lsIt = 1;
 	while((stop<ils_time) && (!finished)){
 		//double v = (double)(random()) / RAND_MAX;
 		int selected = perturbations[random() % perturbations.size()];
