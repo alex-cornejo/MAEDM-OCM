@@ -1,5 +1,5 @@
 /*******************************************************************************************
-Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda 
+Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda, J. A. Cornejo-Acosta 
 ********************************************************************************************/
 
 

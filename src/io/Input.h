@@ -1,3 +1,8 @@
+/*******************************************************************************************
+Authors: J. A. Cornejo-Acosta 
+Description: Load input configuration for the experimentation.  
+********************************************************************************************/
+
 #pragma once
 
 #include <fstream>

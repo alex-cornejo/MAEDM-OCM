@@ -1,5 +1,5 @@
 /*******************************************************************************************
-Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda
+Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda, J. A. Cornejo-Acosta
 
 Description: class for the Memetic Algorithm with Explicit Diversity Management (MA-EDM)
 published in the paper "A Diversity-aware Memetic Algorithm for the Linear Ordering Problem".
