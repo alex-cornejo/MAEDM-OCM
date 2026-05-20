@@ -25,7 +25,7 @@ extern long long crossRemoved;
 long long best = LLONG_MIN;
 
 // for long long variables
-void Individual::local_search_ll(int cuttingMult){
+void Individual::local_search_ll(int neighborCov){
 	//Sort the indexes randomly to make it stochastic
 	int vs[dim];
 	for (int i = 0; i < dim; i++) {
@@ -39,7 +39,7 @@ void Individual::local_search_ll(int cuttingMult){
 	}
 	//Establish the worsening limit
   bool changed = true;
-	long long limit = (long long)(instance->medWin) * (-cuttingMult);
+	long long limit = (long long)(instance->medWin) * (-neighborCov);
 	while (changed) {
 		changed = false;
 		for (int indexv = 0; indexv < dim; indexv++) {
@@ -51,7 +51,7 @@ void Individual::local_search_ll(int cuttingMult){
 			winners.push_back(i);
 			for (int j = i - 1; j >= 0; j--) {//Move to the left
 				gain += problemll->gain[value][S[j]];
-				if (gain < limit + maxgain && cuttingMult > 0){
+				if (gain < limit + maxgain && neighborCov > 0){
 					break;
 				}
 				if (gain > maxgain) {
@@ -66,7 +66,7 @@ void Individual::local_search_ll(int cuttingMult){
 			gain = 0;
 			for (int j = i + 1; j < dim; j++) {//Move to the right
 				gain += problemll->gain[S[j]][value];
-				if (gain < limit + maxgain && cuttingMult > 0){
+				if (gain < limit + maxgain && neighborCov > 0){
 					break;
 				}
 				if (gain > maxgain) {
@@ -101,7 +101,7 @@ void Individual::local_search_ll(int cuttingMult){
 }
 
 // for int variables
-void Individual::local_search(int cuttingMult){
+void Individual::local_search(int neighborCov){
 	//Sort the indexes randomly to make it stochastic
 	int vs[dim];
 	for (int i = 0; i < dim; i++) {
@@ -115,7 +115,7 @@ void Individual::local_search(int cuttingMult){
 	}
 	//Establish the worsening limit
   bool changed = true;
-	long long limit = (long long)(instance->medWin) * (-cuttingMult);
+	long long limit = (long long)(instance->medWin) * (-neighborCov);
 	while (changed) {
 		changed = false;
 		for (int indexv = 0; indexv < dim; indexv++) {
@@ -128,7 +128,7 @@ void Individual::local_search(int cuttingMult){
 			for (int j = i - 1; j >= 0; j--) {//Move to the left
 				gain += problem->gain[value][S[j]];
 
-				if (gain < limit + maxgain && cuttingMult > 0){
+				if (gain < limit + maxgain && neighborCov > 0){
 					break;
 				}
 				if (gain > maxgain) {
@@ -143,7 +143,7 @@ void Individual::local_search(int cuttingMult){
 			gain = 0;
 			for (int j = i + 1; j < dim; j++) {//Move to the right
 				gain += problem->gain[S[j]][value];
-				if (gain < limit + maxgain && cuttingMult > 0){
+				if (gain < limit + maxgain && neighborCov > 0){
 					break;
 				}
 				if (gain > maxgain) {
@@ -178,7 +178,7 @@ void Individual::local_search(int cuttingMult){
 }
 
 // returns number of local search executions
-int Individual::intensify(const string &perturbationType, double ils_time, int cuttingMult, int swaps, bool reqll, const vector<int>& perturbations){
+int Individual::intensify(const string &perturbationType, double ils_time, int neighborCov, int swaps, bool reqll, const vector<int>& perturbations){
 	//cout << "Inicia ILS en " << cost << endl;
 	//Time structures
 	if (finished) return 0;
@@ -187,9 +187,9 @@ int Individual::intensify(const string &perturbationType, double ils_time, int c
 	gettimeofday(&start_bl,NULL);
 	/*P_1 Initial intensification process*/
 	if (!reqll){
-		local_search(cuttingMult);
+		local_search(neighborCov);
 	} else {
-		local_search_ll(cuttingMult);
+		local_search_ll(neighborCov);
 	}
 
 	if(perturbations.empty()) return 1;	// no perturbation selected, no additional local searches applied
@@ -252,9 +252,9 @@ int Individual::intensify(const string &perturbationType, double ils_time, int c
 			newInd.evaluate();
 		}
 		if (!reqll){
-			newInd.local_search(cuttingMult);
+			newInd.local_search(neighborCov);
 		} else {
-			newInd.local_search_ll(cuttingMult);
+			newInd.local_search_ll(neighborCov);
 		}
 		lsIt++;
 		/*P_4 Check cost in the pertutbate solution*/

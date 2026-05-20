@@ -24,7 +24,7 @@ extern volatile bool finished;
 
 MA::MA(int N_, double pc_, const string &crossType_,
        const string &perturbationType_, double DIfactor_, double ils_time_,
-       double finalTime_, const string &outputFile_, int cuttingMult_,
+       double finalTime_, const string &outputFile_, int neighborCov_,
        int swaps_, bool reqLongLong_, Result &result_): result(result_) {
   N = N_;
   pc = pc_;
@@ -37,7 +37,7 @@ MA::MA(int N_, double pc_, const string &crossType_,
   struct timeval currentTime;
   gettimeofday(&currentTime, NULL);
   initialTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
-  cuttingMult = cuttingMult_;
+  neighborCov = neighborCov_;
   swaps = swaps_;
   reqLongLong = reqLongLong_;
   ngen = 0;
@@ -52,7 +52,7 @@ void MA::initPopulation() {
   for (int i = 0; i < N; i++) {
     Individual *ei = new Individual();
     ei->initialize_heuristic();
-    lsCallsCount += ei->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
+    lsCallsCount += ei->intensify(perturbationType, ils_time, neighborCov, swaps, reqLongLong, result.getInput().getPerturbations());
     population.push_back(ei);
     if (bestGlobal == nullptr || ei->getCost() < bestGlobal->getCost()) {
       bestGlobal = ei;
@@ -95,7 +95,7 @@ void MA::crossover() {
 void MA::intensify() {
   for (int i = 0; i < offspring.size(); i++) {
     if (finished) return;
-    lsCallsCount+=offspring[i]->intensify(perturbationType, ils_time, cuttingMult, swaps, reqLongLong, result.getInput().getPerturbations());
+    lsCallsCount+=offspring[i]->intensify(perturbationType, ils_time, neighborCov, swaps, reqLongLong, result.getInput().getPerturbations());
   }
 }
 

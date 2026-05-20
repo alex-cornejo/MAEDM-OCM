@@ -23,9 +23,9 @@ To execute the solver, a json configuration file is required. The configuration 
 | `tracing`                | (bool) Flag to enable diversity and fitness tracing.                                                     |
 | `traceCount`             | (int) Amount of tracings to perform among the algorithm executions.                                      |
 | `reduction`              | (bool) Enables reduction of the input graph.                                                             |
-| `cuttingMult`            | (int) Parameter needed for early-break of local search (recommended `45`, `-1` to disable early-break).  |
+| `neighborCov`            | (int) Parameter $N_{cov}$ needed for early-break of local search (recommended `45`, `-1` disables it).   |
 
-An example of this configuration is the following (`examples/1.conf.json`)
+An example of this configuration is the following (`examples/input1.json`)
 ```json
 {
     "inputFile": "/home/yourpath/CIMAT_Team/INSTANCIAS/12.gr",
@@ -37,7 +37,7 @@ An example of this configuration is the following (`examples/1.conf.json`)
     "tracing": true,
     "traceCount": 100,
     "reduction": true,
-    "cuttingMult": 45
+    "neighborCov": 45
 }
 ```
 
@@ -61,4 +61,4 @@ Once the program is executed, the output json file will be created in the path d
 Note: Trace records of expected diversity `ediversity` are only available for `BNP` replacement strategy.
 
 ## References
-[1] C. Segura, L. Lugo, G. Miranda, and E. D. Serrano Cárdenas, “PACE Solver Description: CIMAT_Team,” in 19th International Symposium on Parameterized and Exact Computation (IPEC 2024), É. Bonnet and P. Rzą\.zewski, Eds., in Leibniz International Proceedings in Informatics (LIPIcs), vol. 321. Dagstuhl, Germany: Schloss Dagstuhl – Leibniz-Zentrum für Informatik, 2024, p. 31:1-31:4. doi: 10.4230/LIPIcs.IPEC.2024.31.
+[1] C. Segura, L. Lugo, G. Miranda, and E. D. Serrano Cárdenas, "PACE Solver Description: CIMAT_Team," in 19th International Symposium on Parameterized and Exact Computation (IPEC 2024), É. Bonnet and P. Rzą\.zewski, Eds., in Leibniz International Proceedings in Informatics (LIPIcs), vol. 321. Dagstuhl, Germany: Schloss Dagstuhl – Leibniz-Zentrum für Informatik, 2024, p. 31:1-31:4. doi: 10.4230/LIPIcs.IPEC.2024.31.
