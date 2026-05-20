@@ -25,7 +25,7 @@ instead of using a matrix. It it used when the instances are too long to maintai
 extern volatile bool finished;
 extern long long crossRemoved;
 extern long long best;
-void Individual::local_search_edges(double time_limit, int cuttingMult){
+void Individual::local_search_edges(double time_limit, int neighborCov){
 	//cout << "Tiempo de parada!" << time_limit << endl;
 	struct timeval currentTime; 
 	gettimeofday(&currentTime, NULL);
@@ -44,8 +44,7 @@ void Individual::local_search_edges(double time_limit, int cuttingMult){
   bool changed = true;
 
 	while (changed) {
-		//cuttingMult++;
-		long long limit = instance->medWin * (-cuttingMult);
+		long long limit = instance->medWin * (-neighborCov);
 		changed = false;
 		struct timeval currentTime; 
 		gettimeofday(&currentTime, NULL);
@@ -76,7 +75,7 @@ void Individual::local_search_edges(double time_limit, int cuttingMult){
 			for (int j = i - 1; j >= 0; j--) {//Move to the left
 				//gain += ((instance->pair_cost(S[i], S[j]) - instance->pair_cost(S[j], S[i])));
 				gain += instance->pair_gain(value, S[j]);
-				if (gain < limit + maxgain && cuttingMult>0){
+				if (gain < limit + maxgain && neighborCov>0){
 					break;
 				}
 				if (gain > maxgain) {
@@ -91,7 +90,7 @@ void Individual::local_search_edges(double time_limit, int cuttingMult){
 			for (int j = i + 1; j < dim; j++) {//Move to the right
 				//gain += ((instance->pair_cost(S[j], S[i]) - instance->pair_cost(S[i], S[j])));
 				gain += instance->pair_gain(S[j], value);
-				if (gain < limit + maxgain && cuttingMult>0){
+				if (gain < limit + maxgain && neighborCov>0){
 					break;
 				}
 				if (gain > maxgain) {
@@ -127,12 +126,12 @@ void Individual::local_search_edges(double time_limit, int cuttingMult){
 	}
 }
 
-void Individual::ils_edges(double ils_time, int cuttingMult, int swaps) {
+void Individual::ils_edges(double ils_time, int neighborCov, int swaps) {
 	struct timeval start_bl,end_bl;
 	double stop=0.0;
 	gettimeofday(&start_bl,NULL);
 	double initTime = (double) (start_bl.tv_sec) + (double) (start_bl.tv_usec)/1.0e6;
-	local_search_edges(ils_time, cuttingMult);
+	local_search_edges(ils_time, neighborCov);
 	Individual newInd=internalClone();
 	int count=0;
 	gettimeofday(&end_bl,NULL);
@@ -188,7 +187,7 @@ void Individual::ils_edges(double ils_time, int cuttingMult, int swaps) {
 			}
 			newInd.evaluate();
 		}
-		newInd.local_search_edges(ils_time - ctime, cuttingMult);
+		newInd.local_search_edges(ils_time - ctime, neighborCov);
 		/*P_4 Check cost in the pertutbate solution*/
 		if(newInd.cost>=cost){
 			S=newInd.S;

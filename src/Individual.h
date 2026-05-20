@@ -30,11 +30,11 @@ class Individual {
 		void crossoverCX(Individual &ind);//Cross both individuals (the result is saved in the individuals) with cycle Crossover
 		void crossoverCXone(Individual &ind, int *valueToPositionI1, int *valueToPositionI2);
 		//Mutation Operator
-		void local_search(int cuttingMult);
-		void local_search_ll(int cuttingMult);//using long long variables
-		void local_search_edges(double time_limit, int cuttingMult);
-		int intensify(const string &mutationType, double ils_time, int cuttingMult, int swaps, bool reqll, const vector<int>& perturbations);
-		void ils_edges(double ils_time, int cuttingMult, int swaps);
+		void local_search(int neighborCov);
+		void local_search_ll(int neighborCov);//using long long variables
+		void local_search_edges(double time_limit, int neighborCov);
+		int intensify(const string &mutationType, double ils_time, int neighborCov, int swaps, bool reqll, const vector<int>& perturbations);
+		void ils_edges(double ils_time, int neighborCov, int swaps);
 		
 		void evaluate();
 		void evaluateWithMatrix();
