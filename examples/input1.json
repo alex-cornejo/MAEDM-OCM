@@ -1,0 +1,12 @@
+{
+    "inputFile": "/home/yourpath/CIMAT_Team/INSTANCIAS/12.gr",
+    "outputFile": "/home/yourpath/CIMAT_Team/1.sol.json",
+    "timeLimit": 300,
+    "replacement": "ELIT",
+    "perturbations": [0, 1, 2],
+    "seed": 1,
+    "tracing": true,
+    "traceCount": 100,
+    "reduction": true,
+    "neighborCov": 45
+}
