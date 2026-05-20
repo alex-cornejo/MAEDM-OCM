@@ -44,7 +44,6 @@ void Individual::local_search_edges(double time_limit, int neighborCov){
   bool changed = true;
 
 	while (changed) {
-		//cuttingMult++;
 		long long limit = instance->medWin * (-neighborCov);
 		changed = false;
 		struct timeval currentTime; 
