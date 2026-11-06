@@ -18,7 +18,7 @@ It was modified for the Pace Challenge 2024 with the following features:
 
 class MA {
 public:
-  MA(int N_, double pc_, const string &crossType_, const string &perturbationType_, double DIfactor_, double ils_time_, double finalTime_, const string &outputFile, int neighborCov, int swaps, bool reqLongLong, Result &result_);
+  MA(int N_, double pc_, const string &crossType_, const string &perturbationType_, double initialDiversityFactor_, double ils_time_, double finalTime_, const string &outputFile, int neighborCov, int swaps, bool reqLongLong, Result &result_);
   void run();
   // Parameters of MA
   int N;                   // Population Size
@@ -27,7 +27,7 @@ public:
   string perturbationType; // mutation type
   double finalTime;        // Seconds
   string outputFile;
-  double DIfactor;
+  double initialDiversityFactor;
   double ils_time;
   int neighborCov;
   int swaps;
