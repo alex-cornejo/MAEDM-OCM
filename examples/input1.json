@@ -8,5 +8,6 @@
     "tracing": true,
     "traceCount": 100,
     "reduction": true,
-    "neighborCov": 45
+    "neighborCov": 45,
+    "initialDiversityFactor": 0.4
 }

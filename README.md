@@ -24,6 +24,7 @@ To execute the solver, a json configuration file is required. The configuration 
 | `traceCount`             | (int) Amount of tracings to perform among the algorithm executions.                                      |
 | `reduction`              | (bool) Enables reduction of the input graph.                                                             |
 | `neighborCov`            | (int) Parameter $N_{cov}$ needed for early-break of local search (recommended `45`, `-1` disables it).   |
+| `initialDiversityFactor` | (double) Parameter to adjust initial diversity threshold of the MA (recommended `0.4`).                  |
 
 An example of this configuration is the following (`examples/input1.json`)
 ```json
@@ -37,7 +38,8 @@ An example of this configuration is the following (`examples/input1.json`)
     "tracing": true,
     "traceCount": 100,
     "reduction": true,
-    "neighborCov": 45
+    "neighborCov": 45,
+    "initialDiversityFactor": 0.4
 }
 ```
 
