@@ -23,14 +23,14 @@ using namespace std;
 extern volatile bool finished;
 
 MA::MA(int N_, double pc_, const string &crossType_,
-       const string &perturbationType_, double DIfactor_, double ils_time_,
+       const string &perturbationType_, double initialDiversityFactor_, double ils_time_,
        double finalTime_, const string &outputFile_, int neighborCov_,
        int swaps_, bool reqLongLong_, Result &result_): result(result_) {
   N = N_;
   pc = pc_;
   crossType = crossType_;
   perturbationType = perturbationType_;
-  DIfactor = DIfactor_;
+  initialDiversityFactor = initialDiversityFactor_;
   ils_time = ils_time_;
   finalTime = finalTime_;
   outputFile = outputFile_;
@@ -241,7 +241,7 @@ void MA::trunReplacement() {
 
 void MA::initDI() {
   double meanDistance = computeDiversity();
-  DI = meanDistance * DIfactor;
+  DI = meanDistance * initialDiversityFactor;
   this->ediversity = DI; // track expected diversity
 }
 

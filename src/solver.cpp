@@ -90,7 +90,8 @@ int main(int argc, char *argv[]) {
   Individual::instance = inst;
 
   string alg;
-  double ils_time, pc, di;
+  double ils_time, pc;
+  double initialDiversityFactor = input.getInitialDiversityFactor();
   int f1Time;
   int swaps = 6;
   int N = 36;
@@ -101,7 +102,6 @@ int main(int argc, char *argv[]) {
     alg = "MA_matrix";
     ils_time = 0.05;
     pc = 0.85;
-    di = 0.4;
     f1Time = totalRuntime * 0.8; // 80% running time for phase 1
     Individual::initialization = "Random";
   }
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
   gettimeofday(&currentTime, NULL);
   double cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;
   if (alg == "MA_matrix") {
-    MA ma(N, pc, "cx", "SWM", di, ils_time, f1Time, "out.txt", neighborCov, swaps, reqLongLong, result);
+    MA ma(N, pc, "cx", "SWM", initialDiversityFactor, ils_time, f1Time, "out.txt", neighborCov, swaps, reqLongLong, result);
     ma.run();
     gettimeofday(&currentTime, NULL);
     cTime = (double)(currentTime.tv_sec) + (double)(currentTime.tv_usec) / 1.0e6;

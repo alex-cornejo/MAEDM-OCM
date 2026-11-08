@@ -6,6 +6,7 @@ Description: Load input configuration for the experimentation.
 #pragma once
 
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -29,6 +30,7 @@ private:
   int traceCount;
   bool reduction;
   int neighborCov;  // neighborhood coverage
+  double initialDiversityFactor;
 
 public:
   Input(const std::string &configFilePath) {
@@ -74,6 +76,18 @@ public:
     } else {
       throw std::invalid_argument("Invalid replacement type in config file!\n");
     }
+
+    // initial diversity factor
+    if (this->json.contains("initialDiversityFactor")) {
+      this->initialDiversityFactor = this->json["initialDiversityFactor"].get<double>();
+      if(this->initialDiversityFactor < 0 || this->initialDiversityFactor > 1){
+        throw std::invalid_argument("Invalid initial diversity factor in config file!\n");
+      }
+    }
+    else{
+      std::cout<<"initialDiversityFactor not found, using default initialDiversityFactor=0.4\n";
+      this->initialDiversityFactor = 0.4;
+    }
   }
 
   // getters
@@ -91,5 +105,6 @@ public:
   int getTraceCount() const { return this->traceCount; }
   bool getReduction() const { return this->reduction; }
   int getNeighborCov() const { return this->neighborCov; }
+  double getInitialDiversityFactor() const { return this->initialDiversityFactor; }
 
 };
