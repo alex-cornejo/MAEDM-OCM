@@ -59,8 +59,10 @@ Once the program is executed, the output json file will be created in the path d
 | `isBig`                  | (bool) `false` if memetic algorithm was applied.                                                               |
 | `solution`               | (int array) Best-found solution.                                                                               |
 | `trace`                  | (array) Trace records; each entry includes fitness, diversity, expected diversity, and elapsed running time.   |
+| `redNumNodesB`           | (int) Number of nodes in the second layer of the processed reduced graph.                                      |
 
-Note: Trace records of expected diversity `ediversity` are only available for `BNP` replacement strategy.
+Notes: 
+- Trace records of expected diversity `ediversity` are only available for `BNP` replacement strategy.
 
 ## References
 [1] C. Segura, L. Lugo, G. Miranda, and E. D. Serrano Cárdenas, "PACE Solver Description: CIMAT_Team," in 19th International Symposium on Parameterized and Exact Computation (IPEC 2024), É. Bonnet and P. Rzą\.zewski, Eds., in Leibniz International Proceedings in Informatics (LIPIcs), vol. 321. Dagstuhl, Germany: Schloss Dagstuhl – Leibniz-Zentrum für Informatik, 2024, p. 31:1-31:4. doi: 10.4230/LIPIcs.IPEC.2024.31.

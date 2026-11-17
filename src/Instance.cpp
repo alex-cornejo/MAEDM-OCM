@@ -105,6 +105,8 @@ void Instance::loadInstance(Result& result) {
             newToOrig[i] = i;
         }
     }
+    // record cardinality of B (no matter reduction)
+    result.setRedNumNodesB(numNodesB);
 }
 
 long long Instance::pair_cost(int i, int j) {
