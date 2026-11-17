@@ -9,7 +9,7 @@ The implementation was written and designed to be run in a Linux environment. Ne
 The following instructions have been tested in Debian 13.
 
 ## Execution
-In order to compile it, just enter the `src/` folder and execute `make`. The only dependency is g++.
+In order to compile it, just execute `./build.sh`. A binary file will be generated in `/build/solver`. The only dependency is g++.
 To execute the solver, a json configuration file is required. The configuration file must contain the following parameters:
 
 |  Parameter               | Description                                                                                              |
@@ -44,7 +44,7 @@ An example of this configuration is the following (`examples/input1.json`)
 ```
 
 ## Example of running for `input1.txt` (set the paths accordingly)
-`./src/solver "/home/yourpath/input1.json"`
+`./build/solver "/home/yourpath/input1.json"`
 
 ## Output
 Once the program is executed, the output json file will be created in the path described at `outputFile` with the result of the execution. This json file contains the following fields:
