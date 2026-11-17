@@ -10,7 +10,7 @@ break is done if the current gain is too low (local_search())
 ********************************************************************************************/
 
 #include "Individual.h"
-#include "utils.h"
+#include "utils/utils.h"
 #include <bits/stdc++.h>
 #include <random>
 #include <sys/time.h>

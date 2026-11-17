@@ -2,7 +2,7 @@
 Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda, J. A. Cornejo-Acosta
 
 Description: it is the entry point. It initializes the paramters and decides to use
-the ILS of the memetic algorithm depending on the size of the problem to be solved 
+the ILS of the memetic algorithm depending on the size of the problem to be solved
 (after reduction). It also incorporates the part related to the management of signals
 for the PaceChallenge 2024.
 *******************************************************************************************/
@@ -19,14 +19,14 @@ using namespace std;
 #include "MA.h"
 #include "Problem.h"
 #include "ProblemLL.h"
-#include "utils.h"
+#include "utils/utils.h"
 #include "io/Input.h"
 #include "io/Output.h"
 
 bool volatile finished = false;
 
-void printer(int signal) { 
-  finished = true; 
+void printer(int signal) {
+  finished = true;
 }
 
 bool isBig = false;
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  Individual::dim = inst->numNodesB, 
+  Individual::dim = inst->numNodesB,
   Individual::problem = p;
   Individual::problemll = pll;
   Individual::instance = inst;
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
       lastLsCallsCount = ma.getBestGlobal()->intensify("SWM", totalRuntime - (cTime - initialTime),
                                   neighborCov * 3, swaps, reqLongLong, input.getPerturbations());
     }
-      
+
     for (int nv : ma.getBestGlobal()->S) {
       result.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
       for (int o : inst->similarInOrig[inst->newToOrig[nv]]) {

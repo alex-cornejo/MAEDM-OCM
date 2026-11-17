@@ -4,7 +4,7 @@ Description: implementation of the cycle-based crossover (CX)
 ********************************************************************************************/
 
 #include "Individual.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 //At exit, both individuls must have been evaluated 
 void Individual::crossoverCX(Individual &ind) {

@@ -8,7 +8,7 @@ Description: Load input configuration for the experimentation.
 #include <vector>
 
 #include "Input.h"
-#include <nlohmann/json.hpp>
+#include "../nlohmann/json.hpp"
 
 class Result {
 

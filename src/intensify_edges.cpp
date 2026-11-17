@@ -12,7 +12,7 @@ instead of using a matrix. It it used when the instances are too long to maintai
 ********************************************************************************************/
 
 #include "Individual.h"
-#include "utils.h"
+#include "utils/utils.h"
 #include <sys/time.h>
 #include <algorithm>
 #include <sys/time.h>

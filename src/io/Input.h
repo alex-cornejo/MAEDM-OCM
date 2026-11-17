@@ -10,7 +10,7 @@ Description: Load input configuration for the experimentation.
 #include <string>
 #include <vector>
 
-#include <nlohmann/json.hpp>
+#include "../nlohmann/json.hpp"
 
 class Input {
 
