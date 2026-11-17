@@ -20,6 +20,8 @@ class Result {
     double runtime;
     int ngen;
     long long lsCallsCount; // number of local search calls
+    int redNumNodesB;       // number of nodes in the reduced graph (set B)
+
     struct TraceEntry {
         long long fitness;
         double diversity;
@@ -59,6 +61,7 @@ class Result {
     void addTrace(long long fitness, double diversity, double ediversity, double elapTime) {
         trace.push_back({fitness, diversity, ediversity, elapTime});
     }
+    void setRedNumNodesB(int redNumNodesB_) { redNumNodesB = redNumNodesB_; }
 
     nlohmann::json toJson() const {
         nlohmann::json bodyJson;
@@ -74,6 +77,7 @@ class Result {
             traceJson.push_back(entry.toJson());
         }
         bodyJson["trace"] = traceJson;
+        bodyJson["redNumNodesB"] = redNumNodesB;
         return bodyJson;
     }
 

@@ -1,5 +1,5 @@
 /*******************************************************************************************
-Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda 
+Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda
 
 Description: class to store the information of a LOP instance when long long is required.
 TODO: make it a template
@@ -11,11 +11,11 @@ TODO: make it a template
 using namespace std;
 
 class ProblemLL {
-	public:
-		ProblemLL(){}
-		~ProblemLL(){ }
-		long long instance[17000][17000];
-		long long gain[17000][17000];
+  public:
+    ProblemLL() {}
+    ~ProblemLL() {}
+    long long instance[17000][17000];
+    long long gain[17000][17000];
 };
 
 #endif

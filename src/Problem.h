@@ -1,5 +1,5 @@
 /*******************************************************************************************
-Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda 
+Authors: Carlos Segura, Lazaro Lugo, Edison Serrano, Gara Miranda
 
 Description: class to store the information of a LOP instance.
 TODO: unify with the Instance class. They are basically the same but came from different
@@ -13,11 +13,11 @@ projects and could not unify it for the PaceChallenge.
 using namespace std;
 
 class Problem {
-	public:
-		Problem(){}
-		~Problem(){ }
-		int instance[17000][17000];
-		int gain[17000][17000];
+  public:
+    Problem() {}
+    ~Problem() {}
+    int instance[17000][17000];
+    int gain[17000][17000];
 };
 
 #endif
