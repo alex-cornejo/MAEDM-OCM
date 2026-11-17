@@ -42,3 +42,8 @@
 
 # custom folders and files
 .vscode/
+.kilo/
+
+# other folders
+/LSBoutput*
+/build
