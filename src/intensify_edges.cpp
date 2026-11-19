@@ -126,19 +126,25 @@ void Individual::local_search_edges(double time_limit, int neighborCov) {
     }
 }
 
-void Individual::ils_edges(double ils_time, int neighborCov, int swaps) {
+void Individual::ils_edges(double ils_time, int neighborCov, int swaps,
+                           const vector<int>& perturbations) {
     struct timeval start_bl, end_bl;
     double stop = 0.0;
     gettimeofday(&start_bl, NULL);
     double initTime = (double) (start_bl.tv_sec) + (double) (start_bl.tv_usec) / 1.0e6;
     local_search_edges(ils_time, neighborCov);
+
+    // early-break of ILS
+    if (perturbations.empty())
+        return; // no perturbation selected, no additional local searches applied.
+
     Individual newInd = internalClone();
     int count = 0;
     gettimeofday(&end_bl, NULL);
     double ctime = (double) (end_bl.tv_sec) + (double) (end_bl.tv_usec) / 1.0e6 - initTime;
     while ((ils_time > ctime) && (!finished)) {
         int type = 0;
-        int selected = random() % 3;
+        int selected = perturbations[random() % perturbations.size()];
         if (selected == 0) {
             for (int i = 0; i < swaps; i++) {
                 int f = random() % dim;

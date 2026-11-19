@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
 
         double ilsTimeSeconds = 0.0;
         long long lastLsCallsCount = 0;
-        if (timeLimit - (cTime - initialTime) > 0 and algorithmConf.containsILS()) {
+        if (timeLimit - (maTimeSeconds) > 0 and algorithmConf.containsILS()) {
             lastLsCallsCount = ma.getBestGlobal()->intensify(
                 "SWM", timeLimit - (cTime - initialTime), neighborCov * 3, swaps, reqLongLong,
                 input.getPerturbations());
@@ -162,7 +162,8 @@ int main(int argc, char* argv[]) {
         ei->initialize_heuristic();
         gettimeofday(&currentTime, NULL);
         cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
-        ei->ils_edges(timeLimit - (cTime - initialTime), neighborCov, swaps);
+        ei->ils_edges(timeLimit - (cTime - initialTime), neighborCov, swaps,
+                      input.getPerturbations());
         for (int nv : ei->S) {
             result.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
             for (int o : inst->similarInOrig[inst->newToOrig[nv]]) {
