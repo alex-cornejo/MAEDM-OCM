@@ -8,7 +8,6 @@ one (Mean) is too slow.
 #include "Individual.h"
 
 #include <algorithm>
-#include <cfloat>
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
 template <typename T>

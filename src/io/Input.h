@@ -7,10 +7,22 @@ Description: Load input configuration for the experimentation.
 
 #include "../nlohmann/json.hpp"
 
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
+
+struct AlgorithmConf {
+    const double epsilon = 1e-9;
+    double maTime = 0;
+    double ilsTime = 0;
+    AlgorithmConf() = default; // Add default constructor
+    bool isValid() const { return std::abs(maTime + ilsTime - 1.0) < epsilon; }
+    bool containsMA() const { return maTime > epsilon; }
+    bool containsILS() const { return ilsTime > epsilon; }
+    bool standaloneILS() const { return not containsMA(); }
+};
 
 class Input {
 
@@ -31,9 +43,10 @@ class Input {
     bool reduction;
     int neighborCov; // neighborhood coverage
     double initialDiversityFactor;
+    AlgorithmConf algorithmConf; // algorithm configuration to run and their time limit
 
   public:
-    Input(const std::string& configFilePath) {
+    explicit Input(const std::string& configFilePath) {
         std::ifstream i(configFilePath);
         // check if open
         if (!i.is_open()) {
@@ -87,6 +100,9 @@ class Input {
                 << "initialDiversityFactor not found, using default initialDiversityFactor=0.4\n";
             this->initialDiversityFactor = 0.4;
         }
+
+        // algorithm configuration
+        setAlgorithmConf();
     }
 
     // getters
@@ -103,4 +119,20 @@ class Input {
     bool getReduction() const { return this->reduction; }
     int getNeighborCov() const { return this->neighborCov; }
     double getInitialDiversityFactor() const { return this->initialDiversityFactor; }
+    AlgorithmConf& getAlgorithmConf() { return this->algorithmConf; }
+
+    // setters
+    void setAlgorithmConf() {
+        if (this->json.contains("algorithmConf")) {
+            nlohmann::json algorithmJson = this->json["algorithmConf"].get<nlohmann::json>();
+            algorithmConf.ilsTime = algorithmJson["ilsTime"].get<double>();
+            algorithmConf.maTime = algorithmJson["maTime"].get<double>();
+
+            if (not algorithmConf.isValid()) {
+                throw std::invalid_argument("Total runtime of algorithms must be 1.0!");
+            }
+        } else {
+            throw std::invalid_argument("No algorithms to run were found in the config file!");
+        }
+    }
 };

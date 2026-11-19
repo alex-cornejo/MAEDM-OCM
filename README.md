@@ -25,6 +25,7 @@ To execute the solver, a json configuration file is required. The configuration 
 | `reduction`              | (bool) Enables reduction of the input graph.                                                             |
 | `neighborCov`            | (int) Parameter $N_{cov}$ needed for early-break of local search (recommended `45`, `-1` disables it).   |
 | `initialDiversityFactor` | (double) Parameter to adjust initial diversity threshold of the MA (recommended `0.4`).                  |
+| `algorithmConf`          | (json) Contains two double keys, `maTime` and `ilsTime`, both specifying the dedicated runtimes.         |
 
 An example of this configuration is the following (`examples/input1.json`)
 ```json
@@ -39,7 +40,11 @@ An example of this configuration is the following (`examples/input1.json`)
     "traceCount": 100,
     "reduction": true,
     "neighborCov": 45,
-    "initialDiversityFactor": 0.4
+    "initialDiversityFactor": 0.4,
+    "algorithmConf": {
+        "maTime": 0.8,
+        "ilsTime": 0.2
+    }
 }
 ```
 
@@ -60,6 +65,8 @@ Once the program is executed, the output json file will be created in the path d
 | `solution`               | (int array) Best-found solution.                                                                               |
 | `trace`                  | (array) Trace records; each entry includes fitness, diversity, expected diversity, and elapsed running time.   |
 | `redNumNodesB`           | (int) Number of nodes in the second layer of the processed reduced graph.                                      |
+| `msTimeSeconds`          | (double) Time spent in the MA (seconds).                                                                       |
+| `ilsTimeSeconds`         | (double) Time spent in the ILS (seconds).                                                                      |
 
 Notes: 
 - Trace records of expected diversity `ediversity` are only available for `BNP` replacement strategy.

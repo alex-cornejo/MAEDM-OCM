@@ -12,13 +12,11 @@ instead of using a matrix. It it used when the instances are too long to maintai
 ********************************************************************************************/
 
 #include "Individual.h"
-#include "utils/utils.h"
 
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <numeric>
-#include <set>
 #include <string>
 #include <sys/time.h>
 
