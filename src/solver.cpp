@@ -45,9 +45,9 @@ int main(int argc, char* argv[]) {
     string confFile = argv[1];
     Input input(confFile);
     Result result(input);
-    int seed = input.getSeed();
-    double totalRuntime = input.getTimeLimit();
-    int neighborCov = input.getNeighborCov();
+    const int seed = input.getSeed();
+    const double timeLimit = input.getTimeLimit();
+    const int neighborCov = input.getNeighborCov();
 
     signal(SIGTERM, printer);
     struct timeval currentTime;
@@ -87,36 +87,40 @@ int main(int argc, char* argv[]) {
     Individual::problemll = pll;
     Individual::instance = inst;
 
-    string alg;
     double ils_time, pc;
-    double initialDiversityFactor = input.getInitialDiversityFactor();
+    const double initialDiversityFactor = input.getInitialDiversityFactor();
+    auto& algorithmConf = input.getAlgorithmConf();
     int f1Time;
-    int swaps = 6;
-    int N = 36;
+    const int swaps = 6;
+    const int N = 36;
     if (isBig) {
-        alg = "ILS";
         Individual::initialization = "Score";
+
+        // force the execution to use 100% ILS (standalone ILS)
+        algorithmConf.ilsTime = 1.0;
+        algorithmConf.maTime = 0.0;
+
     } else {
-        alg = "MA_matrix";
         ils_time = 0.05;
         pc = 0.85;
-        f1Time = totalRuntime * 0.8; // 80% running time for phase 1
+        f1Time = timeLimit * algorithmConf.maTime; // running time for phase 1
         Individual::initialization = "Random";
     }
     Individual::permBlock = 60;
 
     gettimeofday(&currentTime, NULL);
     double cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
-    if (alg == "MA_matrix") {
+
+    if (algorithmConf.containsMA()) {
         MA ma(N, pc, "cx", "SWM", initialDiversityFactor, ils_time, f1Time, "out.txt", neighborCov,
               swaps, reqLongLong, result);
         ma.run();
         gettimeofday(&currentTime, NULL);
         cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
         long long lastLsCallsCount = 0;
-        if (totalRuntime - (cTime - initialTime) > 0) {
+        if (timeLimit - (cTime - initialTime) > 0 and algorithmConf.containsILS()) {
             lastLsCallsCount = ma.getBestGlobal()->intensify(
-                "SWM", totalRuntime - (cTime - initialTime), neighborCov * 3, swaps, reqLongLong,
+                "SWM", timeLimit - (cTime - initialTime), neighborCov * 3, swaps, reqLongLong,
                 input.getPerturbations());
         }
 
@@ -127,9 +131,8 @@ int main(int argc, char* argv[]) {
             }
         }
         result.setLsCallsCount(ma.getLSCallsCount() + lastLsCallsCount);
-    } else if (alg == "ILS") {
+    } else if (algorithmConf.standaloneILS()) {
         // Estimate medwin
-        long long tot = 0;
         long long times = 1000000;
         vector<long long> values;
         for (int i = 0; i < times; i++) {
@@ -146,13 +149,15 @@ int main(int argc, char* argv[]) {
         ei->initialize_heuristic();
         gettimeofday(&currentTime, NULL);
         cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
-        ei->ils_edges(totalRuntime - (cTime - initialTime), neighborCov, swaps);
+        ei->ils_edges(timeLimit - (cTime - initialTime), neighborCov, swaps);
         for (int nv : ei->S) {
             result.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
             for (int o : inst->similarInOrig[inst->newToOrig[nv]]) {
                 result.addToSolution(inst->numNodesA + 1 + o);
             }
         }
+    } else {
+        throw std::invalid_argument("No algorithms to run were found in the config file!");
     }
     gettimeofday(&currentTime, NULL);
     cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
