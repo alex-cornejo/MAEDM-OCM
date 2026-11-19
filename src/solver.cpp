@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
         cerr << "Input parameters error...\n";
         return 1;
     }
-    string confFile = argv[1];
+    const string confFile = argv[1];
     Input input(confFile);
     Result result(input);
     const int seed = input.getSeed();

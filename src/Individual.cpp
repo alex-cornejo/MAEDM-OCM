@@ -8,8 +8,6 @@ Description: some internal operations required by MA:
 
 #include "Individual.h"
 
-#include <sys/time.h>
-
 Individual::Individual() { S.resize(dim); }
 
 TFitness Individual::getCost() { return -cost; }

@@ -122,7 +122,7 @@ class Input {
 
     // setters
     void setAlgorithmConf() {
-        if (this->json.contains("algorithm")) {
+        if (this->json.contains("algorithmConf")) {
             nlohmann::json algorithmJson = this->json["algorithmConf"].get<nlohmann::json>();
             algorithmConf.ilsTime = algorithmJson["ilsTime"].get<double>();
             algorithmConf.maTime = algorithmJson["maTime"].get<double>();
