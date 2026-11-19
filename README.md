@@ -65,8 +65,8 @@ Once the program is executed, the output json file will be created in the path d
 | `solution`               | (int array) Best-found solution.                                                                               |
 | `trace`                  | (array) Trace records; each entry includes fitness, diversity, expected diversity, and elapsed running time.   |
 | `redNumNodesB`           | (int) Number of nodes in the second layer of the processed reduced graph.                                      |
-| `msTime`                 | (double) Time spent in the MA (percentage).                                                        |
-| `ilsTime`                | (double) Time spent in the ILS (percentage).                                                                   |
+| `msTimeSeconds`          | (double) Time spent in the MA (seconds).                                                                       |
+| `ilsTimeSeconds`         | (double) Time spent in the ILS (seconds).                                                                      |
 
 Notes: 
 - Trace records of expected diversity `ediversity` are only available for `BNP` replacement strategy.

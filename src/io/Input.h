@@ -7,6 +7,7 @@ Description: Load input configuration for the experimentation.
 
 #include "../nlohmann/json.hpp"
 
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <string>

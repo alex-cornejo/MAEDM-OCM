@@ -115,14 +115,24 @@ int main(int argc, char* argv[]) {
         MA ma(N, pc, "cx", "SWM", initialDiversityFactor, ils_time, f1Time, "out.txt", neighborCov,
               swaps, reqLongLong, result);
         ma.run();
+
+        // record running time of MA
         gettimeofday(&currentTime, NULL);
         cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
+        double maTimeSeconds = cTime - initialTime;
+        result.setMATimeSeconds(maTimeSeconds);
+
         long long lastLsCallsCount = 0;
         if (timeLimit - (cTime - initialTime) > 0 and algorithmConf.containsILS()) {
             lastLsCallsCount = ma.getBestGlobal()->intensify(
                 "SWM", timeLimit - (cTime - initialTime), neighborCov * 3, swaps, reqLongLong,
                 input.getPerturbations());
         }
+
+        // record running time of ILS
+        gettimeofday(&currentTime, NULL);
+        cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
+        result.setILSTimeSeconds(cTime - initialTime - maTimeSeconds);
 
         for (int nv : ma.getBestGlobal()->S) {
             result.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
@@ -156,15 +166,15 @@ int main(int argc, char* argv[]) {
                 result.addToSolution(inst->numNodesA + 1 + o);
             }
         }
-    } else {
-        throw std::invalid_argument("No algorithms to run were found in the config file!");
+
+        // record runtimes
+        gettimeofday(&currentTime, NULL);
+        cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
+        result.setRuntime(cTime - initialTime);
+        result.setMATimeSeconds(0);
     }
-    gettimeofday(&currentTime, NULL);
-    cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
+
     result.setIsBig(isBig);
-    result.setRuntime(cTime - initialTime);
-    result.setILSTime(algorithmConf.ilsTime);
-    result.setMATime(algorithmConf.maTime);
     result.write(); // write json with results
     return 0;
 }

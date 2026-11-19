@@ -21,8 +21,8 @@ class Result {
     int ngen;
     long long lsCallsCount; // number of local search calls
     int redNumNodesB;       // number of nodes in the reduced graph (set B)
-    double maTime;          // time (percentage) spent in the MA
-    double ilsTime;         // time (percentage) spent in the ILS
+    double maTimeSeconds;   // time (seconds) spent in the MA
+    double ilsTimeSeconds;  // time (seconds) spent in the ILS
 
     struct TraceEntry {
         long long fitness;
@@ -64,8 +64,8 @@ class Result {
         trace.push_back({fitness, diversity, ediversity, elapTime});
     }
     void setRedNumNodesB(int redNumNodesB_) { redNumNodesB = redNumNodesB_; }
-    void setMATime(double maTime_) { maTime = maTime_; }
-    void setILSTime(double ilsTime_) { ilsTime = ilsTime_; }
+    void setMATimeSeconds(double maTimeSeconds_) { maTimeSeconds = maTimeSeconds_; }
+    void setILSTimeSeconds(double ilsTimeSeconds_) { ilsTimeSeconds = ilsTimeSeconds_; }
 
     nlohmann::json toJson() const {
         nlohmann::json bodyJson;
@@ -82,8 +82,8 @@ class Result {
         }
         bodyJson["trace"] = traceJson;
         bodyJson["redNumNodesB"] = redNumNodesB;
-        bodyJson["maTime"] = maTime;
-        bodyJson["ilsTime"] = ilsTime;
+        bodyJson["maTimeSeconds"] = maTimeSeconds;
+        bodyJson["ilsTimeSeconds"] = ilsTimeSeconds;
         return bodyJson;
     }
 

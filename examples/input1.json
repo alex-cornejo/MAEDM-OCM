@@ -12,6 +12,6 @@
     "initialDiversityFactor": 0.4,
     "algorithmConf": {
         "maTime": 0.8,
-        "ilsTime": 0.1
+        "ilsTime": 0.2
     }
 }
