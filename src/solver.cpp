@@ -120,19 +120,22 @@ int main(int argc, char* argv[]) {
         gettimeofday(&currentTime, NULL);
         cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
         double maTimeSeconds = cTime - initialTime;
-        result.setMATimeSeconds(maTimeSeconds);
 
+        double ilsTimeSeconds = 0.0;
         long long lastLsCallsCount = 0;
         if (timeLimit - (cTime - initialTime) > 0 and algorithmConf.containsILS()) {
             lastLsCallsCount = ma.getBestGlobal()->intensify(
                 "SWM", timeLimit - (cTime - initialTime), neighborCov * 3, swaps, reqLongLong,
                 input.getPerturbations());
-        }
 
-        // record running time of ILS
-        gettimeofday(&currentTime, NULL);
-        cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
-        result.setILSTimeSeconds(cTime - initialTime - maTimeSeconds);
+            // record running time of ILS
+            gettimeofday(&currentTime, NULL);
+            cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
+            ilsTimeSeconds = cTime - initialTime - maTimeSeconds;
+        }
+        result.setMATimeSeconds(maTimeSeconds);
+        result.setILSTimeSeconds(ilsTimeSeconds);
+        result.setRuntime(maTimeSeconds + ilsTimeSeconds);
 
         for (int nv : ma.getBestGlobal()->S) {
             result.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
@@ -170,7 +173,9 @@ int main(int argc, char* argv[]) {
         // record runtimes
         gettimeofday(&currentTime, NULL);
         cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
-        result.setRuntime(cTime - initialTime);
+        double ilsTimeSeconds = cTime - initialTime;
+        result.setRuntime(ilsTimeSeconds);
+        result.setILSTimeSeconds(ilsTimeSeconds);
         result.setMATimeSeconds(0);
     }
 
