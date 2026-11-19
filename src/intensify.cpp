@@ -206,7 +206,6 @@ int Individual::intensify(const string& perturbationType, double ils_time, int n
     /*Loop principal*/
     int lsIt = 1;
     while ((stop < ils_time) && (!finished)) {
-        // double v = (double)(random()) / RAND_MAX;
         int selected = perturbations[random() % perturbations.size()];
         if (selected == 0) {
             for (int i = 0; i < swaps; i++) {

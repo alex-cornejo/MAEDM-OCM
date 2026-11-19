@@ -37,7 +37,7 @@ class Individual {
     void local_search_edges(double time_limit, int neighborCov);
     int intensify(const string& mutationType, double ils_time, int neighborCov, int swaps,
                   bool reqll, const vector<int>& perturbations);
-    void ils_edges(double ils_time, int neighborCov, int swaps);
+    int ils_edges(double ils_time, int neighborCov, int swaps, const vector<int>& perturbations);
 
     void evaluate();
     void evaluateWithMatrix();

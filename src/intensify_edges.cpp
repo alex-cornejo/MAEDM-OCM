@@ -126,19 +126,26 @@ void Individual::local_search_edges(double time_limit, int neighborCov) {
     }
 }
 
-void Individual::ils_edges(double ils_time, int neighborCov, int swaps) {
+int Individual::ils_edges(double ils_time, int neighborCov, int swaps,
+                          const vector<int>& perturbations) {
     struct timeval start_bl, end_bl;
     double stop = 0.0;
     gettimeofday(&start_bl, NULL);
     double initTime = (double) (start_bl.tv_sec) + (double) (start_bl.tv_usec) / 1.0e6;
     local_search_edges(ils_time, neighborCov);
+
+    // early-break of ILS
+    if (perturbations.empty())
+        return 1; // no perturbation selected, no additional local searches applied.
+
     Individual newInd = internalClone();
     int count = 0;
     gettimeofday(&end_bl, NULL);
     double ctime = (double) (end_bl.tv_sec) + (double) (end_bl.tv_usec) / 1.0e6 - initTime;
+    int lsIt = 1;
     while ((ils_time > ctime) && (!finished)) {
         int type = 0;
-        int selected = random() % 3;
+        int selected = perturbations[random() % perturbations.size()];
         if (selected == 0) {
             for (int i = 0; i < swaps; i++) {
                 int f = random() % dim;
@@ -188,6 +195,7 @@ void Individual::ils_edges(double ils_time, int neighborCov, int swaps) {
             newInd.evaluate();
         }
         newInd.local_search_edges(ils_time - ctime, neighborCov);
+        lsIt++;
         /*P_4 Check cost in the pertutbate solution*/
         if (newInd.cost >= cost) {
             S = newInd.S;
@@ -204,4 +212,5 @@ void Individual::ils_edges(double ils_time, int neighborCov, int swaps) {
         gettimeofday(&end_bl, NULL);
         ctime = (double) (end_bl.tv_sec) + (double) (end_bl.tv_usec) / 1.0e6 - initTime;
     }
+    return lsIt;
 }
