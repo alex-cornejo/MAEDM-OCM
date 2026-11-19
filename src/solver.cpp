@@ -163,6 +163,8 @@ int main(int argc, char* argv[]) {
     cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
     result.setIsBig(isBig);
     result.setRuntime(cTime - initialTime);
+    result.setILSTime(algorithmConf.ilsTime);
+    result.setMATime(algorithmConf.maTime);
     result.write(); // write json with results
     return 0;
 }

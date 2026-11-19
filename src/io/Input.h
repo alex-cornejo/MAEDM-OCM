@@ -20,7 +20,7 @@ struct AlgorithmConf {
     bool isValid() const { return std::abs(maTime + ilsTime - 1.0) < epsilon; }
     bool containsMA() const { return maTime > epsilon; }
     bool containsILS() const { return ilsTime > epsilon; }
-    bool standaloneILS() const { return not containsILS(); }
+    bool standaloneILS() const { return not containsMA(); }
 };
 
 class Input {
