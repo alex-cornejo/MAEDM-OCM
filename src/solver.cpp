@@ -166,7 +166,7 @@ int main(int argc, char* argv[]) {
         double elapTime = cTime - initialTime;
 
         // initialize restarts
-        ei->initRestartTimes(algorithmConf.ilsRestarts, timeLimit - elapTime, elapTime);
+        ei->initRestartTimes(algorithmConf.ilsRestarts, timeLimit - elapTime);
 
         // execute ILS
         int lsCallsCount =

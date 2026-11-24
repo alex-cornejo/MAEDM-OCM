@@ -66,7 +66,7 @@ class Individual {
     void restart();
 
   public:
-    void initRestartTimes(const int numRestarts, const double timeLimit, const double elapTime);
+    void initRestartTimes(const int numRestarts, const double timeLimit);
 };
 
 #endif

@@ -30,15 +30,14 @@ void Individual::restart() {
     restartTimes.pop_back();
 }
 
-void Individual::initRestartTimes(const int numRestarts, const double timeLimit,
-                                  const double elapTime) {
+void Individual::initRestartTimes(const int numRestarts, const double timeLimit) {
     if (numRestarts <= 0)
         return;
     restartTimes.reserve(numRestarts);
     double delta;
     delta = timeLimit / (numRestarts + 1);
     for (int i = numRestarts; i >= 1; --i) {
-        restartTimes.push_back(delta * i + elapTime);
+        restartTimes.push_back(delta * i);
     }
 }
 

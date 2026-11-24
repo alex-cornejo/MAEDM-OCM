@@ -217,7 +217,7 @@ int Individual::ils_edges(double ils_time, int neighborCov, int swaps,
         }
     }
 
-    // track best found solution
+    // recover best found solution
     if (best > cost) {
         S = bestSolution;
         cost = best;
