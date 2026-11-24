@@ -25,7 +25,7 @@ To execute the solver, a json configuration file is required. The configuration 
 | `reduction`              | (bool) Enables reduction of the input graph.                                                             |
 | `neighborCov`            | (int) Parameter $N_{cov}$ needed for early-break of local search (recommended `45`, `-1` disables it).   |
 | `initialDiversityFactor` | (double) Parameter to adjust initial diversity threshold of the MA (recommended `0.4`).                  |
-| `algorithmConf`          | (json) Contains two double keys, `maTime` and `ilsTime`, both specifying the dedicated runtimes.         |
+| `algorithmConf`          | (json) Contains the algorithm configuration, `maTime`, `ilsTime` and `ilsRestarts`.                      |
 
 An example of this configuration is the following (`examples/input1.json`)
 ```json
@@ -43,7 +43,8 @@ An example of this configuration is the following (`examples/input1.json`)
     "initialDiversityFactor": 0.4,
     "algorithmConf": {
         "maTime": 0.8,
-        "ilsTime": 0.2
+        "ilsTime": 0.2,
+        "ilsRestarts": 0
     }
 }
 ```
