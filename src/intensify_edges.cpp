@@ -23,6 +23,7 @@ instead of using a matrix. It it used when the instances are too long to maintai
 extern volatile bool finished;
 extern long long crossRemoved;
 extern long long best;
+extern vector<int> bestSolution;
 void Individual::local_search_edges(double time_limit, int neighborCov) {
     // cout << "Tiempo de parada!" << time_limit << endl;
     struct timeval currentTime;
@@ -139,7 +140,6 @@ int Individual::ils_edges(double ils_time, int neighborCov, int swaps,
         return 1; // no perturbation selected, no additional local searches applied.
 
     Individual newInd = internalClone();
-    int count = 0;
     gettimeofday(&end_bl, NULL);
     double ctime = (double) (end_bl.tv_sec) + (double) (end_bl.tv_usec) / 1.0e6 - initTime;
     int lsIt = 1;
@@ -205,12 +205,22 @@ int Individual::ils_edges(double ils_time, int neighborCov, int swaps,
         }
         if (cost > best) {
             best = cost;
-            // cout << "                                                     Va: " << best -
-            // crossRemoved << endl;
+            bestSolution = S;
+            // cout << "Va: " << best - crossRemoved << endl;
         }
 
         gettimeofday(&end_bl, NULL);
         ctime = (double) (end_bl.tv_sec) + (double) (end_bl.tv_usec) / 1.0e6 - initTime;
+        if (this->needsRestart(ctime)) {
+            this->restart();
+            newInd = internalClone();
+        }
+    }
+
+    // recover best found solution
+    if (best > cost) {
+        S = bestSolution;
+        cost = best;
     }
     return lsIt;
 }

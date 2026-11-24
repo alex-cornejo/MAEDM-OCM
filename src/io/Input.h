@@ -17,6 +17,7 @@ struct AlgorithmConf {
     const double epsilon = 1e-9;
     double maTime = 0;
     double ilsTime = 0;
+    int ilsRestarts = 0;
     AlgorithmConf() = default; // Add default constructor
     bool isValid() const { return std::abs(maTime + ilsTime - 1.0) < epsilon; }
     bool containsMA() const { return maTime > epsilon; }
@@ -127,6 +128,7 @@ class Input {
             nlohmann::json algorithmJson = this->json["algorithmConf"].get<nlohmann::json>();
             algorithmConf.ilsTime = algorithmJson["ilsTime"].get<double>();
             algorithmConf.maTime = algorithmJson["maTime"].get<double>();
+            algorithmConf.ilsRestarts = algorithmJson["ilsRestarts"].get<int>();
 
             if (not algorithmConf.isValid()) {
                 throw std::invalid_argument("Total runtime of algorithms must be 1.0!");

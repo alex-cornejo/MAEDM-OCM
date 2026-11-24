@@ -160,10 +160,17 @@ int main(int argc, char* argv[]) {
         inst->medWin = values[values.size() / 2];
         Individual* ei = new Individual();
         ei->initialize_heuristic();
+
         gettimeofday(&currentTime, NULL);
         cTime = (double) (currentTime.tv_sec) + (double) (currentTime.tv_usec) / 1.0e6;
-        int lsCallsCount = ei->ils_edges(timeLimit - (cTime - initialTime), neighborCov, swaps,
-                                         input.getPerturbations());
+        double elapTime = cTime - initialTime;
+
+        // initialize restarts
+        ei->initRestartTimes(algorithmConf.ilsRestarts, timeLimit - elapTime);
+
+        // execute ILS
+        int lsCallsCount =
+            ei->ils_edges(timeLimit - elapTime, neighborCov, swaps, input.getPerturbations());
         for (int nv : ei->S) {
             result.addToSolution(inst->numNodesA + 1 + inst->newToOrig[nv]);
             for (int o : inst->similarInOrig[inst->newToOrig[nv]]) {

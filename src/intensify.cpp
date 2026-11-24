@@ -24,6 +24,7 @@ break is done if the current gain is too low (local_search())
 extern volatile bool finished;
 extern long long crossRemoved;
 long long best = LLONG_MIN;
+vector<int> bestSolution;
 
 // for long long variables
 void Individual::local_search_ll(int neighborCov) {
@@ -274,8 +275,7 @@ int Individual::intensify(const string& perturbationType, double ils_time, int n
         stop = (end_bl.tv_sec - start_bl.tv_sec) + (end_bl.tv_usec - start_bl.tv_usec) / 1.0e6;
         if (cost > best) {
             best = cost;
-            // cout << "                                                     Va: " << best -
-            // crossRemoved << endl;
+            // cout << "Va: " << best - crossRemoved << endl;
         }
     }
     return lsIt;

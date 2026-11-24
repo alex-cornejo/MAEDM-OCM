@@ -18,7 +18,7 @@ class Result {
     bool reduced;
     bool isBig;
     double runtime;
-    int ngen;
+    int ngen = 0;
     long long lsCallsCount; // number of local search calls
     int redNumNodesB;       // number of nodes in the reduced graph (set B)
     double maTimeSeconds;   // time (seconds) spent in the MA

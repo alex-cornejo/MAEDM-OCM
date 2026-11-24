@@ -58,6 +58,15 @@ class Individual {
     vector<int> S;
     TDistance distance;
     TFitness cost;
+
+    // for restart computations (standalone ILS)
+  private:
+    vector<double> restartTimes;
+    bool needsRestart(double elapsedTime);
+    void restart();
+
+  public:
+    void initRestartTimes(const int numRestarts, const double timeLimit);
 };
 
 #endif
